@@ -57,7 +57,7 @@
           <a href="#foreground">Foreground</a>
           <a href="#nse">NSE</a>
           <a href="#inapp">In-app</a>
-          <a href="#payload">APNs payload</a>
+          <a href="#payload">Rich media payload</a>
           <a href="#verify">Verification</a>
           <a href="#troubleshoot">Troubleshooting</a>
         </div>
@@ -98,7 +98,7 @@
             <li><a href="#foreground">Step 6 — Foreground</a></li>
             <li><a href="#nse">Step 7 — NSE</a></li>
             <li><a href="#inapp">In-app messages</a></li>
-            <li><a href="#payload">APNs payload</a></li>
+            <li><a href="#payload">Rich media payload</a></li>
             <li><a href="#verify">Verification</a></li>
             <li><a href="#troubleshoot">Troubleshooting</a></li>
           </ol>
@@ -109,18 +109,18 @@
           <table>
             <thead><tr><th>Capability</th><th>How it works</th></tr></thead>
             <tbody>
-              <tr><td>Permission prompt</td><td>SDK requests alert, sound, badge</td></tr>
-              <tr><td>APNs device token</td><td>Host forwards token → SDK registers with BNotify API</td></tr>
-              <tr><td>Click / dismiss / action</td><td>Host maps <code>UNNotificationResponse</code> → <code>trackEvent</code></td></tr>
-              <tr><td>Delivery (<code>received</code>)</td><td>Optional NSE via <code>BNotifyExtensionSafe</code></td></tr>
-              <tr><td>In-app messages</td><td>Socket.IO (<code>inapp:show</code>)</td></tr>
+              <tr><td>Permission prompt</td><td>SDK requests alert, sound, and badge</td></tr>
+              <tr><td>Device token</td><td>Forward the system token to the SDK at launch</td></tr>
+              <tr><td>Click / dismiss / action</td><td>Call <code>trackEvent</code> from the notification response</td></tr>
+              <tr><td>Delivery (<code>received</code>)</td><td>Optional Notification Service Extension</td></tr>
+              <tr><td>In-app messages</td><td>Modal, card, banner, fullscreen, and image</td></tr>
               <tr><td>Default category</td><td><code>bnotify</code> with action <code>OPEN</code></td></tr>
             </tbody>
           </table>
         </div>
         <div class="callout warn">
-          <div class="callout-title">Backend sends via APNs</div>
-          <p>The SDK does not send pushes. Your backend uses the registered device token with APNs (Auth Key <code>.p8</code> or certificates uploaded to BNotify).</p>
+          <div class="callout-title">Dashboard delivers campaigns</div>
+          <p>The iOS SDK does not send notifications. Register the device, then create and send campaigns from the BNotify dashboard. Upload your Apple Push credentials in the dashboard so iOS devices can receive them.</p>
         </div>
 
         <h2 id="prerequisites">Prerequisites</h2>
@@ -132,7 +132,7 @@
               <tr><td>Deployment Target ≥ 13.0</td><td>Matches SDK</td></tr>
               <tr><td>Apple Developer Program</td><td>Required for real-device push</td></tr>
               <tr><td>Push Notifications capability</td><td>App ID + profiles</td></tr>
-              <tr><td>Physical device</td><td>Full APNs testing</td></tr>
+              <tr><td>Physical device</td><td>Required for real push testing</td></tr>
               <tr><td>Dashboard plist</td><td><code>projectId</code>, <code>apiKey</code>, <code>appId</code>, …</td></tr>
             </tbody>
           </table>
@@ -144,7 +144,7 @@
           <li><span class="mark">2</span><span>Enable <strong>Push Notifications</strong> capability</span></li>
           <li><span class="mark">3</span><span>Add <code>bnotify-config.plist</code> to the app target</span></li>
           <li><span class="mark">4</span><span>Wire register APIs at launch</span></li>
-          <li><span class="mark">5</span><span>Forward APNs token / failure to SDK</span></li>
+          <li><span class="mark">5</span><span>Forward the device token / registration error to the SDK</span></li>
           <li><span class="mark">6</span><span>Implement click/dismiss <code>trackEvent</code></span></li>
           <li><span class="mark opt">7</span><span>App Groups + Notification Service Extension</span></li>
           <li><span class="mark opt">8</span><span>Disable verbose logs in Release</span></li>
@@ -167,7 +167,7 @@
         <ol class="steps">
           <li>Apple Developer → Identifiers → enable <strong>Push Notifications</strong> on your App ID.</li>
           <li>Renew provisioning profiles that include Push.</li>
-          <li>Upload APNs Auth Key (<code>.p8</code>) or certificates to the <strong>BNotify backend</strong>.</li>
+          <li>Upload your Apple Push key (<code>.p8</code>) or certificates in the <strong>BNotify dashboard</strong>.</li>
           <li>In Xcode target → Signing &amp; Capabilities → <strong>+ Capability → Push Notifications</strong>.</li>
         </ol>
         <p>For NSE delivery tracking, add the same <strong>App Group</strong> on the app and extension targets, then set <code>appGroupId</code> in the plist.</p>
@@ -198,8 +198,8 @@
 &lt;/plist&gt;</code></pre>
         </div>
         <div class="callout tip">
-          <div class="callout-title">Host URLs</div>
-          <p>REST + Socket.IO default to <code>https://bnotify.convexinteractive.com</code>. You do not need <code>baseURL</code> / <code>socketURL</code> in the dashboard file.</p>
+          <div class="callout-title">Config file</div>
+          <p>The dashboard download is enough. Do not add extra URL keys to the plist.</p>
         </div>
 
         <h2 id="appdelegate">Step 4 — Wire AppDelegate</h2>
@@ -243,7 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 }</code></pre>
         </div>
-        <p>Keep APNs token callbacks on <code>AppDelegate</code> even when using SceneDelegate.</p>
+        <p>Keep device-token callbacks on <code>AppDelegate</code> even when using SceneDelegate.</p>
 
         <h2 id="events">Step 5 — Track clicks, dismissals &amp; actions</h2>
         <div class="pre-wrap">
@@ -336,8 +336,8 @@ class NotificationService: UNNotificationServiceExtension {
 }</code></pre>
         </div>
 
-        <h2 id="inapp">In-app messages (Socket.IO)</h2>
-        <p>In-app campaigns are not delivered through APNs. They use the same Socket.IO contract as Android: <code>inapp:fetch</code>, <code>inapp:show</code>, <code>inapp:event</code>. Types: modal, card, top_banner, fullscreen, image.</p>
+        <h2 id="inapp">In-app messages</h2>
+        <p>In-app campaigns appear inside the app (modal, card, top banner, fullscreen, and image). They are separate from lock-screen notifications. Optional custom triggers:</p>
         <div class="pre-wrap">
           <span class="lang">Swift</span>
           <button class="copy-btn" type="button">Copy</button>
@@ -345,7 +345,7 @@ class NotificationService: UNNotificationServiceExtension {
 BNotifyInApp.logEvent("purchase_completed")</code></pre>
         </div>
 
-        <h2 id="payload">APNs payload contract</h2>
+        <h2 id="payload">Rich media payload</h2>
         <p>For NSE + rich media, include <code>mutable-content: 1</code> and put <code>imageUrl</code> as a sibling of <code>aps</code>:</p>
         <div class="pre-wrap">
           <span class="lang">JSON</span>
@@ -371,8 +371,8 @@ BNotifyInApp.logEvent("purchase_completed")</code></pre>
         <h2 id="verify">Verification</h2>
         <ol class="steps">
           <li>Run on a physical device with Push capability.</li>
-          <li>Grant notification permission; confirm device token logs and backend registration (HTTP 200).</li>
-          <li>Send a test APNs push with <code>notificationId</code> and category <code>bnotify</code>.</li>
+          <li>Grant notification permission; confirm the device appears in the BNotify dashboard.</li>
+          <li>Send a test push from the BNotify dashboard with <code>notificationId</code> and category <code>bnotify</code>.</li>
           <li>Tap / dismiss → events appear in analytics.</li>
           <li>With NSE: confirm <code>received</code> + image thumbnail / expand.</li>
         </ol>
@@ -386,7 +386,7 @@ BNotifyInApp.logEvent("purchase_completed")</code></pre>
               <tr><td>Text-only push, no image</td><td>Missing NSE / <code>mutable-content</code> / <code>imageUrl</code></td><td>Add NSE; put <code>imageUrl</code> outside <code>aps</code></td></tr>
               <tr><td>App not found on register</td><td>Wrong <code>appId</code> / bundle</td><td>Match dashboard app + <code>packageName</code></td></tr>
               <tr><td>No dismiss events</td><td>Category not <code>bnotify</code></td><td>Call <code>registerCategories()</code>; set category in payload</td></tr>
-              <tr><td>In-app never shows</td><td>Socket not connected</td><td>Confirm config load + network; check logs</td></tr>
+              <tr><td>In-app never shows</td><td>Offline or incomplete init</td><td>Confirm config load, network, and that <code>registerForPushNotifications()</code> ran</td></tr>
             </tbody>
           </table>
         </div>

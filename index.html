@@ -80,7 +80,7 @@
           <a class="platform-card" href="android.html">
             <div class="card-icon">AND</div>
             <h3>Android</h3>
-            <p>JitPack library + Gradle plugin. Socket.IO delivery with FCM fallback, system notifications, and in-app campaigns.</p>
+            <p>Add the Android SDK, initialize once, and receive system notifications plus in-app campaigns.</p>
             <div class="card-foot">
               <span class="badge badge-live">Available</span>
               <span>minSdk 24 · v1.0.4</span>
@@ -89,7 +89,7 @@
           <a class="platform-card" href="ios.html">
             <div class="card-icon">iOS</div>
             <h3>iOS</h3>
-            <p>Swift Package Manager. APNs registration, click/dismiss analytics, Notification Service Extension for images &amp; delivery events.</p>
+            <p>Add the iOS SDK, enable push, and track clicks, dismissals, and optional rich-media notifications.</p>
             <div class="card-foot">
               <span class="badge badge-live">Available</span>
               <span>iOS 13+</span>
@@ -128,28 +128,28 @@
             <tbody>
               <tr>
                 <td>Device registration</td>
-                <td>Socket.IO + FCM token</td>
-                <td>APNs token → REST API</td>
+                <td>Automatic after SDK init</td>
+                <td>Automatic after SDK init</td>
               </tr>
               <tr>
                 <td>System push UI</td>
-                <td>Auto tray notifications</td>
-                <td>APNs + optional NSE media</td>
+                <td>Tray notifications</td>
+                <td>Lock screen / banner notifications</td>
               </tr>
               <tr>
                 <td>Click / dismiss analytics</td>
-                <td>Built into SDK flow</td>
-                <td>Host calls <code>trackEvent</code></td>
+                <td>Handled by the SDK</td>
+                <td>Report via <code>trackEvent</code></td>
               </tr>
               <tr>
                 <td>In-app messages</td>
-                <td>Socket.IO campaigns</td>
-                <td>Socket.IO campaigns</td>
+                <td>Modal, card, banner, and more</td>
+                <td>Modal, card, banner, and more</td>
               </tr>
               <tr>
                 <td>Expanded images / GIF</td>
-                <td>BigPicture + GIF frames</td>
-                <td>NSE attachments</td>
+                <td>Supported</td>
+                <td>Supported (Notification Service Extension)</td>
               </tr>
             </tbody>
           </table>
@@ -157,7 +157,7 @@
 
         <div class="callout info">
           <div class="callout-title">Important</div>
-          <p>SDKs do <strong>not</strong> send pushes by themselves. Your BNotify backend delivers messages (Socket.IO / FCM on Android, APNs on iOS). The SDK registers the device, displays content, and reports events.</p>
+          <p>The SDK does <strong>not</strong> send campaigns. Register the device with BNotify, then create and send messages from the BNotify dashboard. The SDK displays notifications and reports engagement.</p>
         </div>
 
         <h2>Quick links</h2>

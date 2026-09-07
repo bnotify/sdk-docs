@@ -60,7 +60,7 @@
         <div class="faq">
           <details open>
             <summary>Does the SDK send push notifications?</summary>
-            <p>No. BNotify SDKs register the device and display / track messages. Your BNotify backend delivers pushes (Socket.IO / FCM on Android, APNs on iOS).</p>
+            <p>No. The SDK registers the device and displays / tracks messages. You create and send campaigns from the BNotify dashboard.</p>
           </details>
           <details>
             <summary>Which platforms are available today?</summary>
@@ -68,7 +68,7 @@
           </details>
           <details>
             <summary>Where do I get credentials?</summary>
-            <p>From the BNotify dashboard: download <code>bnotify-config.json</code> (Android) or <code>bnotify-config.plist</code> (iOS). You need <code>projectId</code>, <code>appId</code>, <code>apiKey</code>, and platform-specific FCM / APNs setup.</p>
+            <p>From the BNotify dashboard: download <code>bnotify-config.json</code> (Android) or <code>bnotify-config.plist</code> (iOS). You need <code>projectId</code>, <code>appId</code>, <code>apiKey</code>, and the other fields included in that download.</p>
           </details>
           <details>
             <summary>What is the Android Maven coordinate?</summary>
@@ -88,11 +88,11 @@
           </details>
           <details>
             <summary>Are in-app messages the same as pushes?</summary>
-            <p>No. In-app campaigns use Socket.IO (<code>inapp:show</code>) and render inside the app. System tray pushes use FCM/Socket (Android) or APNs (iOS).</p>
+            <p>No. In-app campaigns render inside the running app. System notifications appear in the tray or on the lock screen. Both are configured from the BNotify dashboard.</p>
           </details>
           <details>
             <summary>Can I use the SDKs offline / without a dashboard project?</summary>
-            <p>Device registration and delivery require valid project credentials and network access to the BNotify host.</p>
+            <p>Device registration and delivery require valid project credentials and a network connection.</p>
           </details>
           <details>
             <summary>How do I get help for Flutter or React Native?</summary>

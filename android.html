@@ -113,18 +113,18 @@
           <table>
             <thead><tr><th>Capability</th><th>Result</th></tr></thead>
             <tbody>
-              <tr><td>Device registration</td><td>Socket.IO handshake with FCM token + device metadata</td></tr>
-              <tr><td>Push receive</td><td>Realtime via Socket.IO (+ optional FCM fallback)</td></tr>
-              <tr><td>System notification UI</td><td>Auto-shown by SDK (default)</td></tr>
-              <tr><td>Click / dismiss analytics</td><td>Emitted to BNotify server</td></tr>
+              <tr><td>Device registration</td><td>Device appears in the BNotify dashboard after init</td></tr>
+              <tr><td>Push receive</td><td>System tray notifications</td></tr>
+              <tr><td>System notification UI</td><td>Shown automatically by the SDK (default)</td></tr>
+              <tr><td>Click / dismiss analytics</td><td>Reported to BNotify</td></tr>
               <tr><td>Token callback</td><td><code>OnTokenListener.onNewToken</code></td></tr>
-              <tr><td>In-app campaigns</td><td>When server sends <code>inapp:show</code></td></tr>
+              <tr><td>In-app campaigns</td><td>Shown in-app when a campaign is due</td></tr>
             </tbody>
           </table>
         </div>
         <div class="callout warn">
-          <div class="callout-title">Backend delivers pushes</div>
-          <p>The Android SDK does not send notifications. Your BNotify backend delivers over Socket.IO / FCM. The SDK registers the device and displays / tracks messages.</p>
+          <div class="callout-title">Dashboard delivers campaigns</div>
+          <p>The Android SDK does not send notifications. Create and send campaigns from the BNotify dashboard. The SDK registers the device, displays messages, and reports engagement.</p>
         </div>
 
         <h2 id="prerequisites">Prerequisites</h2>
@@ -134,10 +134,10 @@
             <tbody>
               <tr><td>Android Studio + Kotlin DSL</td><td>Examples use <code>.kts</code></td></tr>
               <tr><td><code>minSdk</code> ≥ 24</td><td>Matches SDK</td></tr>
-              <tr><td>Internet on device</td><td>Socket + API</td></tr>
-              <tr><td>BNotify credentials</td><td>For <code>bnotify-config.json</code></td></tr>
-              <tr><td>FCM values</td><td><code>fcmAppId</code>, <code>fcmProjectId</code>, <code>fcmApiKey</code>, <code>fcmSenderId</code></td></tr>
-              <tr><td>Physical device</td><td>Recommended for FCM / tray testing</td></tr>
+              <tr><td>Internet on device</td><td>Required for registration and delivery</td></tr>
+              <tr><td>BNotify credentials</td><td>Download <code>bnotify-config.json</code> from the dashboard</td></tr>
+              <tr><td>Config fields</td><td>Use the values provided in the dashboard download</td></tr>
+              <tr><td>Physical device</td><td>Recommended for notification testing</td></tr>
             </tbody>
           </table>
         </div>
@@ -264,7 +264,7 @@ apply(plugin = "com.github.bnotifysdk.bnotifyplugin")</code></pre>
             <thead><tr><th>Field</th><th>Required</th><th>Used for</th></tr></thead>
             <tbody>
               <tr><td><code>projectId</code>, <code>appId</code>, <code>apiKey</code>, <code>packageName</code></td><td>Yes</td><td>Project / app identity</td></tr>
-              <tr><td><code>fcmAppId</code>, <code>fcmProjectId</code>, <code>fcmApiKey</code>, <code>fcmSenderId</code></td><td>Yes</td><td>Manual Firebase init</td></tr>
+              <tr><td><code>fcmAppId</code>, <code>fcmProjectId</code>, <code>fcmApiKey</code>, <code>fcmSenderId</code></td><td>Yes</td><td>Included in the dashboard config file</td></tr>
               <tr><td>Other fields</td><td>Optional</td><td>Reserved / future</td></tr>
             </tbody>
           </table>
@@ -285,7 +285,7 @@ apply(plugin = "com.github.bnotifysdk.bnotifyplugin")</code></pre>
     }
 }</code></pre>
         </div>
-        <p>Initialization saves config, sets the default click Activity, initializes Firebase from FCM fields, fetches the FCM token, connects Socket.IO, and registers in-app activity tracking. If your AAR exposes a four-argument overload (<code>app</code>, <code>context</code>, <code>activity</code>, <code>json</code>), pass <code>applicationContext</code> as the second argument.</p>
+        <p>Call this once in <code>Application.onCreate</code>. It registers the device, enables notifications, and starts in-app messaging. If your SDK version exposes a four-argument overload (<code>app</code>, <code>context</code>, <code>activity</code>, <code>json</code>), pass <code>applicationContext</code> as the second argument.</p>
 
         <h2 id="step-6">Step 6 — Manifest</h2>
         <div class="pre-wrap">
@@ -353,7 +353,7 @@ override fun onNewIntent(intent: Intent) {
             <thead><tr><th>Call</th><th>Why</th></tr></thead>
             <tbody>
               <tr><td><code>handleIntent</code></td><td>Permission path, click extras, service restart</td></tr>
-              <tr><td><code>setOnTokenListener</code></td><td>BNotify token after socket registration</td></tr>
+              <tr><td><code>setOnTokenListener</code></td><td>Receives the BNotify device token after registration</td></tr>
               <tr><td><code>setActivityToOpenOnClick</code></td><td>Which Activity future taps should open</td></tr>
               <tr><td><code>onNewIntent</code></td><td>Required when app is already in memory</td></tr>
             </tbody>
@@ -394,15 +394,15 @@ override fun onNewIntent(intent: Intent) {
         <p>Send a <code>screen</code> field in the notification payload. The SDK places it in click Intent extras — <strong>your app</strong> decides navigation (<code>home</code>, <code>Test</code>, or any custom route).</p>
 
         <h2 id="inapp">In-app messaging</h2>
-        <p>In-app campaigns arrive over Socket.IO (<code>inapp:show</code>), not FCM. Types include modal, card, top banner, fullscreen, and image. They can appear even if the user denied system notification permission, as long as the socket is connected after <code>initializeBase</code>.</p>
+        <p>In-app campaigns appear inside the app (modal, card, top banner, fullscreen, and image). They can still show if the user denied system notification permission, as long as <code>initializeBase</code> has run and the device is online.</p>
 
         <h2 id="verify">Verification</h2>
         <ol class="steps">
           <li>Install on a physical device with network access.</li>
-          <li>Confirm logs show Socket connect + BNotify token callback.</li>
+          <li>Confirm logs show the BNotify token callback.</li>
           <li>Send a test push from the BNotify dashboard.</li>
           <li>Tap the notification → Activity opens → click event tracked.</li>
-          <li>Bring app to foreground → in-app fetch / show if campaigns exist.</li>
+          <li>Bring the app to the foreground and confirm an in-app campaign appears if one is scheduled.</li>
         </ol>
 
         <h2 id="troubleshoot">Troubleshooting</h2>
@@ -414,7 +414,7 @@ override fun onNewIntent(intent: Intent) {
               <tr><td><code>No bnotify-config.json</code></td><td>Wrong path</td><td>File must be <code>app/bnotify-config.json</code></td></tr>
               <tr><td>No tray notification on API 33+</td><td>Permission denied</td><td>Request <code>POST_NOTIFICATIONS</code></td></tr>
               <tr><td>Tap does nothing when app open</td><td>Missing <code>onNewIntent</code></td><td>Forward intent + use <code>singleTop</code></td></tr>
-              <tr><td>No device on dashboard</td><td>Bad credentials / network</td><td>Verify JSON fields and Socket connectivity</td></tr>
+              <tr><td>No device on dashboard</td><td>Bad credentials / network</td><td>Verify the config JSON and that the device is online</td></tr>
             </tbody>
           </table>
         </div>
