@@ -187,28 +187,16 @@ img {
 }
 
 .brand-logo {
-  height: 36px;
+  height: 32px;
   width: auto;
-  display: none;
-}
-
-html[data-theme="dark"] .brand-logo {
   display: block;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #fff;
 }
 
 .brand-text {
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  font-size: 1.15rem;
-  display: inline;
-}
-
-html[data-theme="dark"] .brand-text {
   display: none;
-}
-
-.brand-text span {
-  color: var(--bn-red);
 }
 
 .topbar-actions {
@@ -788,15 +776,15 @@ ul.clean li {
 
 .hero {
   display: grid;
-  grid-template-columns: 1.3fr 0.9fr;
-  gap: 1.5rem;
-  align-items: center;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 0;
+  align-items: stretch;
   margin-bottom: 2rem;
-  padding: 1.5rem;
+  padding: 0;
   border-radius: 18px;
-  background: var(--bn-hero-bg);
+  background: #fff;
   color: #fff;
-  border: 1px solid var(--bn-hero-border);
+  border: 1px solid var(--bn-line);
   box-shadow: var(--bn-shadow);
   position: relative;
   overflow: hidden;
@@ -805,6 +793,8 @@ ul.clean li {
 .hero-copy {
   position: relative;
   z-index: 1;
+  background: var(--bn-hero-bg);
+  padding: 1.75rem 1.65rem;
 }
 
 .hero h1 {
@@ -833,12 +823,13 @@ ul.clean li {
   z-index: 1;
   display: grid;
   place-items: center;
-  padding: 1rem;
+  padding: 1.5rem 1.25rem;
+  background: #fff;
 }
 
 .hero-brand img {
-  width: min(100%, 340px);
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.28));
+  width: min(100%, 280px);
+  filter: none;
 }
 
 .faq details {
@@ -1016,12 +1007,8 @@ ul.clean li {
     columns: 1;
   }
 
-  .brand-logo,
-  html[data-theme="dark"] .brand-logo {
-    display: none;
-  }
-
-  html[data-theme="dark"] .brand-text {
-    display: inline;
+  .brand-logo {
+    height: 26px;
+    padding: 3px 6px;
   }
 }
