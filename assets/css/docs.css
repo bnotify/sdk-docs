@@ -832,6 +832,29 @@ ul.clean li {
   filter: none;
 }
 
+.doc-figure {
+  margin: 1rem 0 1.6rem;
+  border: 1px solid var(--bn-line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bn-surface);
+  box-shadow: var(--bn-shadow);
+}
+
+.doc-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #f4f7fd;
+}
+
+.doc-figure figcaption {
+  padding: 0.7rem 0.95rem;
+  font-size: 0.88rem;
+  color: var(--bn-muted);
+  border-top: 1px solid var(--bn-line);
+}
+
 .faq details {
   background: var(--bn-surface);
   border: 1px solid var(--bn-line);

@@ -42,6 +42,7 @@
       <div class="sidebar-section">
         <div class="sidebar-label">Overview</div>
         <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+        <a class="nav-link" data-page="console.html" href="console.html">Create a project</a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Platforms</div>
@@ -64,6 +65,7 @@
           <a href="#troubleshoot">Troubleshooting</a>
         </div>
         <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="web.html" href="web.html">Web <span class="badge badge-soon">Soon</span></a>
         <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
         <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
       </div>
@@ -80,6 +82,11 @@
         <div class="page-kicker">Platform · Android</div>
         <h1>Android SDK integration</h1>
         <p class="lead">Add BNotify to any Android app with JitPack, the Gradle config plugin, and a few lifecycle hooks. After setup, devices register automatically and can receive pushes plus in-app campaigns.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Create the app in Console first</div>
+          <p>Before Gradle setup, <a href="console.html">create a project, add an Android app, and download <code>bnotify-config.json</code></a>. Place that file at <code>app/bnotify-config.json</code>, then continue below.</p>
+        </div>
 
         <div class="meta-row">
           <span class="chip"><strong>Artifact</strong> bnotifysdk + bnotifyplugin</span>
@@ -137,7 +144,7 @@
               <tr><td>Android Studio + Kotlin DSL</td><td>Examples use <code>.kts</code></td></tr>
               <tr><td><code>minSdk</code> ≥ 24</td><td>Matches SDK</td></tr>
               <tr><td>Internet on device</td><td>Required for registration and delivery</td></tr>
-              <tr><td>BNotify credentials</td><td>Download <code>bnotify-config.json</code> from the dashboard</td></tr>
+              <tr><td>BNotify credentials</td><td>Download <code>bnotify-config.json</code> after you <a href="console.html">register the Android app in Console</a></td></tr>
               <tr><td>Config fields</td><td>Use the values provided in the dashboard download</td></tr>
               <tr><td>Physical device</td><td>Recommended for notification testing</td></tr>
             </tbody>
@@ -149,7 +156,7 @@
           <li><span class="mark">1</span><span>Add JitPack to <code>settings.gradle.kts</code></span></li>
           <li><span class="mark">2</span><span>Add plugin classpath in project <code>build.gradle.kts</code></span></li>
           <li><span class="mark">3</span><span><code>implementation</code> SDK + <code>apply</code> plugin in app module</span></li>
-          <li><span class="mark">4</span><span>Add <code>app/bnotify-config.json</code></span></li>
+          <li><span class="mark">4</span><span>Add <code>app/bnotify-config.json</code> (downloaded from Console)</span></li>
           <li><span class="mark">5</span><span>Sync Gradle → confirm <code>GeneratedConfig</code></span></li>
           <li><span class="mark">6</span><span>Call <code>BNotifyApp.initializeBase</code> in <code>Application</code></span></li>
           <li><span class="mark">7</span><span>Register custom <code>Application</code> in manifest</span></li>
@@ -240,8 +247,8 @@ apply(plugin = "com.github.bnotifysdk.bnotifyplugin")</code></pre>
         </div>
         <p>On sync, the plugin reads <code>app/bnotify-config.json</code> and generates <code>GeneratedConfig.kt</code> under your <code>applicationId</code> package. Missing JSON fails the build with a clear error.</p>
 
-        <h2 id="step-4">Step 4 — Create <code>app/bnotify-config.json</code></h2>
-        <p>Path required by the plugin: <code>{projectRoot}/app/bnotify-config.json</code>.</p>
+        <h2 id="step-4">Step 4 — Add <code>app/bnotify-config.json</code></h2>
+        <p>Download this file from the Console after you register the Android app (see <a href="console.html#config">Create a project</a>). Path required by the plugin: <code>{projectRoot}/app/bnotify-config.json</code>.</p>
         <div class="pre-wrap">
           <span class="lang">JSON</span>
           <button class="copy-btn" type="button">Copy</button>
@@ -427,7 +434,7 @@ override fun onNewIntent(intent: Intent) {
         </div>
 
         <footer class="footer">
-          <span>Next: <a href="ios.html">iOS integration →</a></span>
+          <span><a href="console.html">← Console setup</a> · Next: <a href="ios.html">iOS integration →</a></span>
           <span>Android SDK 1.0.4</span>
         </footer>
       </div>

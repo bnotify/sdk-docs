@@ -38,11 +38,13 @@
       <div class="sidebar-section">
         <div class="sidebar-label">Overview</div>
         <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+        <a class="nav-link" data-page="console.html" href="console.html">Create a project</a>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-label">Platforms</div>
         <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="web.html" href="web.html">Web <span class="badge badge-soon">Soon</span></a>
         <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
         <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
       </div>
@@ -66,11 +68,15 @@
           </details>
           <details>
             <summary>Which platforms are available today?</summary>
-            <p><strong>Android</strong> (JitPack 1.0.4) and <strong>iOS</strong> (SPM on GitLab) are production-ready. <strong>Flutter</strong> and <strong>React Native</strong> are coming soon.</p>
+            <p><strong>Android</strong> (JitPack 1.0.4) and <strong>iOS</strong> (SPM on GitLab) are production-ready. <strong>Web</strong>, <strong>Flutter</strong>, and <strong>React Native</strong> are coming soon.</p>
+          </details>
+          <details>
+            <summary>How do I create a project and add an app?</summary>
+            <p>Open the <a href="https://console.bnotify.com/" target="_blank" rel="noopener">BNotify Console</a>, log in, create a project, click Plus (+) on Overview, pick iOS / Android / Web, register the app, then download the config file. Full walkthrough with screenshots: <a href="console.html">Create a project</a>.</p>
           </details>
           <details>
             <summary>Where do I get credentials?</summary>
-            <p>From the <a href="https://console.bnotify.com/projects" target="_blank" rel="noopener">BNotify Console Dashboard</a>: download <code>bnotify-config.json</code> (Android) or <code>bnotify-config.plist</code> (iOS). You need <code>projectId</code>, <code>appId</code>, <code>apiKey</code>, and the other fields included in that download.</p>
+            <p>After you register an app in the <a href="console.html">Console</a>, download <code>bnotify-config.json</code> (Android) or <code>bnotify-config.plist</code> (iOS). You need <code>projectId</code>, <code>appId</code>, <code>apiKey</code>, and the other fields included in that download.</p>
           </details>
           <details>
             <summary>What is the Android Maven coordinate?</summary>
@@ -97,7 +103,7 @@
             <p>Device registration and delivery require valid project credentials and a network connection.</p>
           </details>
           <details>
-            <summary>How do I get help for Flutter or React Native?</summary>
+            <summary>How do I get help for Web, Flutter, or React Native?</summary>
             <p>Those SDKs are not published yet. Email <a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a> for roadmap or early-access interest.</p>
           </details>
           <details>
