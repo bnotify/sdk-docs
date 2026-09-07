@@ -1,4 +1,31 @@
 (function () {
+  const THEME_KEY = "bn-theme";
+
+  function currentTheme() {
+    const saved = localStorage.getItem(THEME_KEY);
+    return saved === "dark" ? "dark" : "light";
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    const btn = document.getElementById("themeToggle");
+    if (btn) {
+      btn.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+      btn.title = theme === "dark" ? "Light theme" : "Dark theme";
+    }
+  }
+
+  applyTheme(currentTheme());
+
+  const themeToggle = document.getElementById("themeToggle");
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      const next = currentTheme() === "dark" ? "light" : "dark";
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    });
+  }
+
   const sidebar = document.getElementById("sidebar");
   const toggle = document.getElementById("menuToggle");
   if (toggle && sidebar) {
@@ -35,7 +62,6 @@
     });
   });
 
-  // Highlight current page in sidebar
   const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
   document.querySelectorAll(".nav-link[data-page]").forEach(function (link) {
     if (link.getAttribute("data-page") === path) {
@@ -43,7 +69,6 @@
     }
   });
 
-  // Contact form → mailto
   const form = document.getElementById("contactForm");
   if (form) {
     form.addEventListener("submit", function (e) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,19 +10,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/docs.css" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("bn-theme");
+      document.documentElement.setAttribute("data-theme", t === "dark" ? "dark" : "light");
+    })();
+  </script>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html">
       <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
       <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
-      <span class="brand-text mobile-only">b<span>notify</span></span>
+      <span class="brand-text">b<span>notify</span></span>
     </a>
     <div class="topbar-actions">
       <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
       <a class="topbar-link" href="faq.html">FAQ</a>
       <a class="topbar-link" href="contact.html">Contact</a>
       <a class="btn btn-primary" href="android.html">Get Started</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
       <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
     </div>
   </header>
@@ -51,7 +61,7 @@
       <div class="content-inner">
         <section class="hero">
           <div class="hero-copy">
-            <div class="page-kicker" style="color:#ffb3b6;">Mobile Notification Platform</div>
+            <div class="page-kicker">Mobile Notification Platform</div>
             <h1>Ship push &amp; in-app messaging with BNotify SDK</h1>
             <p>Production-ready SDKs for Android and iOS. Flutter and React Native are on the roadmap. Follow platform guides to register devices, deliver notifications, and track engagement.</p>
             <div class="hero-actions">
