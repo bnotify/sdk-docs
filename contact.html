@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — BNotify SDK</title>
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
+      <span class="brand-text mobile-only">b<span>notify</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
+      <a class="topbar-link" href="faq.html">FAQ</a>
+      <a class="btn btn-primary" href="mailto:bnotify93@gmail.com">Email us</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+    <main class="content">
+      <div class="content-inner">
+        <div class="page-kicker">Support</div>
+        <h1>Contact</h1>
+        <p class="lead">Questions about integration, credentials, or upcoming Flutter / React Native SDKs? Reach the BNotify team directly.</p>
+
+        <div class="contact-email">
+          <img src="assets/img/icon.png" alt="" width="44" height="44" style="border-radius:10px;background:#fff;" />
+          <div>
+            <div style="font-size:0.8rem;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--bn-muted);">Support email</div>
+            <strong><a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a></strong>
+            <div style="color:var(--bn-muted);font-size:0.9rem;margin-top:0.2rem;">Temporary contact — official domain email will replace this later.</div>
+          </div>
+        </div>
+
+        <div class="contact-panel">
+          <h2 style="border:none;margin-top:0;padding-top:0;">Send a message</h2>
+          <p style="color:var(--bn-muted);margin-top:0;">Submitting opens your email client with a pre-filled message to <strong>bnotify93@gmail.com</strong>.</p>
+          <form id="contactForm">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name" autocomplete="name" />
+
+            <label for="email">Work email</label>
+            <input id="email" name="email" type="email" required placeholder="you@company.com" autocomplete="email" />
+
+            <label for="platform">Platform</label>
+            <select id="platform" name="platform" required>
+              <option value="Android">Android</option>
+              <option value="iOS">iOS</option>
+              <option value="Flutter">Flutter (coming soon)</option>
+              <option value="React Native">React Native (coming soon)</option>
+              <option value="General">General / dashboard</option>
+            </select>
+
+            <label for="message">How can we help?</label>
+            <textarea id="message" name="message" rows="6" required placeholder="Describe your issue, include SDK version and short logs (redact API keys)."></textarea>
+
+            <button class="btn btn-primary" type="submit">Open email to bnotify93@gmail.com</button>
+          </form>
+        </div>
+
+        <h2>Before you write</h2>
+        <ul class="clean">
+          <li>Check the <a href="faq.html">FAQ</a> and platform guide (<a href="android.html">Android</a> / <a href="ios.html">iOS</a>).</li>
+          <li>Include OS version, app package / bundle ID, and whether you tested on a physical device.</li>
+          <li>Never paste full API keys or signing credentials in email.</li>
+        </ul>
+
+        <footer class="footer">
+          <span><a href="faq.html">← FAQ</a> · <a href="index.html">Home</a></span>
+          <span>© <a href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a></span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>

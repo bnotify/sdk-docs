@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iOS Integration — BNotify SDK</title>
+  <meta name="description" content="Step-by-step guide to integrate the BNotify iOS SDK via Swift Package Manager." />
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
+      <span class="brand-text mobile-only">b<span>notify</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
+      <a class="topbar-link" href="faq.html">FAQ</a>
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="https://gitlab.com/hamza.hafeez/bnotifyiossdk" target="_blank" rel="noopener">GitLab</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <div class="nav-sub">
+          <a href="#prerequisites">Prerequisites</a>
+          <a href="#checklist">Checklist</a>
+          <a href="#spm">Add package</a>
+          <a href="#capabilities">Capabilities</a>
+          <a href="#plist">Config plist</a>
+          <a href="#appdelegate">AppDelegate</a>
+          <a href="#events">Track events</a>
+          <a href="#foreground">Foreground</a>
+          <a href="#nse">NSE</a>
+          <a href="#inapp">In-app</a>
+          <a href="#payload">APNs payload</a>
+          <a href="#verify">Verification</a>
+          <a href="#troubleshoot">Troubleshooting</a>
+        </div>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <div class="page-kicker">Platform · iOS</div>
+        <h1>iOS SDK integration</h1>
+        <p class="lead">Add BNotify with Swift Package Manager, enable Push Notifications, drop in <code>bnotify-config.plist</code>, and wire AppDelegate. Optionally add a Notification Service Extension for delivery tracking and rich images.</p>
+
+        <div class="meta-row">
+          <span class="chip"><strong>Distribution</strong> SPM</span>
+          <span class="chip"><strong>Minimum</strong> iOS 13.0</span>
+          <span class="chip"><strong>Product</strong> BNotify</span>
+          <span class="chip"><strong>Repo</strong> <a href="https://gitlab.com/hamza.hafeez/bnotifyiossdk" target="_blank" rel="noopener">GitLab</a></span>
+        </div>
+
+        <div class="toc-inline">
+          <strong>On this page</strong>
+          <ol>
+            <li><a href="#what-you-get">What you get</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+            <li><a href="#spm">Step 1 — SPM</a></li>
+            <li><a href="#capabilities">Step 2 — Capabilities</a></li>
+            <li><a href="#plist">Step 3 — Config plist</a></li>
+            <li><a href="#appdelegate">Step 4 — AppDelegate</a></li>
+            <li><a href="#events">Step 5 — Events</a></li>
+            <li><a href="#foreground">Step 6 — Foreground</a></li>
+            <li><a href="#nse">Step 7 — NSE</a></li>
+            <li><a href="#inapp">In-app messages</a></li>
+            <li><a href="#payload">APNs payload</a></li>
+            <li><a href="#verify">Verification</a></li>
+            <li><a href="#troubleshoot">Troubleshooting</a></li>
+          </ol>
+        </div>
+
+        <h2 id="what-you-get">What you get after integration</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Capability</th><th>How it works</th></tr></thead>
+            <tbody>
+              <tr><td>Permission prompt</td><td>SDK requests alert, sound, badge</td></tr>
+              <tr><td>APNs device token</td><td>Host forwards token → SDK registers with BNotify API</td></tr>
+              <tr><td>Click / dismiss / action</td><td>Host maps <code>UNNotificationResponse</code> → <code>trackEvent</code></td></tr>
+              <tr><td>Delivery (<code>received</code>)</td><td>Optional NSE via <code>BNotifyExtensionSafe</code></td></tr>
+              <tr><td>In-app messages</td><td>Socket.IO (<code>inapp:show</code>)</td></tr>
+              <tr><td>Default category</td><td><code>bnotify</code> with action <code>OPEN</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Backend sends via APNs</div>
+          <p>The SDK does not send pushes. Your backend uses the registered device token with APNs (Auth Key <code>.p8</code> or certificates uploaded to BNotify).</p>
+        </div>
+
+        <h2 id="prerequisites">Prerequisites</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Requirement</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Xcode 15+</td><td>SPM + Swift package</td></tr>
+              <tr><td>Deployment Target ≥ 13.0</td><td>Matches SDK</td></tr>
+              <tr><td>Apple Developer Program</td><td>Required for real-device push</td></tr>
+              <tr><td>Push Notifications capability</td><td>App ID + profiles</td></tr>
+              <tr><td>Physical device</td><td>Full APNs testing</td></tr>
+              <tr><td>Dashboard plist</td><td><code>projectId</code>, <code>apiKey</code>, <code>appId</code>, …</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="checklist">Integration checklist</h2>
+        <ul class="checklist">
+          <li><span class="mark">1</span><span>Add SPM product <code>BNotify</code> to the app target</span></li>
+          <li><span class="mark">2</span><span>Enable <strong>Push Notifications</strong> capability</span></li>
+          <li><span class="mark">3</span><span>Add <code>bnotify-config.plist</code> to the app target</span></li>
+          <li><span class="mark">4</span><span>Wire register APIs at launch</span></li>
+          <li><span class="mark">5</span><span>Forward APNs token / failure to SDK</span></li>
+          <li><span class="mark">6</span><span>Implement click/dismiss <code>trackEvent</code></span></li>
+          <li><span class="mark opt">7</span><span>App Groups + Notification Service Extension</span></li>
+          <li><span class="mark opt">8</span><span>Disable verbose logs in Release</span></li>
+        </ul>
+
+        <h2 id="spm">Step 1 — Add the Swift Package</h2>
+        <ol class="steps">
+          <li>Xcode → <strong>File → Add Package Dependencies…</strong></li>
+          <li>Enter: <code>https://gitlab.com/hamza.hafeez/bnotifyiossdk.git</code></li>
+          <li>Choose version rule (e.g. Up to Next Major).</li>
+          <li>Add product <strong>BNotify</strong> to the main app (and NSE if you create one).</li>
+        </ol>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import BNotify</code></pre>
+        </div>
+
+        <h2 id="capabilities">Step 2 — Apple Developer / Xcode capabilities</h2>
+        <ol class="steps">
+          <li>Apple Developer → Identifiers → enable <strong>Push Notifications</strong> on your App ID.</li>
+          <li>Renew provisioning profiles that include Push.</li>
+          <li>Upload APNs Auth Key (<code>.p8</code>) or certificates to the <strong>BNotify backend</strong>.</li>
+          <li>In Xcode target → Signing &amp; Capabilities → <strong>+ Capability → Push Notifications</strong>.</li>
+        </ol>
+        <p>For NSE delivery tracking, add the same <strong>App Group</strong> on the app and extension targets, then set <code>appGroupId</code> in the plist.</p>
+
+        <h2 id="plist">Step 3 — Add <code>bnotify-config.plist</code></h2>
+        <p>Download from the BNotify dashboard. Keep the filename exactly <code>bnotify-config.plist</code> and include it in the <strong>main app</strong> target membership. The SDK loads it from <code>Bundle.main</code>.</p>
+        <div class="pre-wrap">
+          <span class="lang">XML</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;projectId&lt;/key&gt;
+    &lt;string&gt;your-project-id&lt;/string&gt;
+    &lt;key&gt;packageName&lt;/key&gt;
+    &lt;string&gt;com.example.yourapp&lt;/string&gt;
+    &lt;key&gt;apiKey&lt;/key&gt;
+    &lt;string&gt;your-api-key&lt;/string&gt;
+    &lt;key&gt;appId&lt;/key&gt;
+    &lt;string&gt;your-app-id&lt;/string&gt;
+    &lt;key&gt;authDomain&lt;/key&gt;&lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;databaseURL&lt;/key&gt;&lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;storageBucket&lt;/key&gt;&lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;messagingSenderId&lt;/key&gt;&lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;measurementId&lt;/key&gt;&lt;string&gt;&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;</code></pre>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Host URLs</div>
+          <p>REST + Socket.IO default to <code>https://bnotify.convexinteractive.com</code>. You do not need <code>baseURL</code> / <code>socketURL</code> in the dashboard file.</p>
+        </div>
+
+        <h2 id="appdelegate">Step 4 — Wire AppDelegate</h2>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import UIKit
+import UserNotifications
+import BNotify
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -&gt; Bool {
+        UNUserNotificationCenter.current().delegate = self
+
+        #if !DEBUG
+        BNotifyLog.isEnabled = false
+        #endif
+
+        BNotifyManager.shared.registerCategories()
+        BNotifyManager.shared.registerForPushNotifications()
+        return true
+    }
+
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
+        BNotifyManager.shared.didRegisterForRemoteNotifications(token: deviceToken)
+    }
+
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ) {
+        BNotifyManager.shared.didFailToRegisterForRemoteNotifications(error: error)
+    }
+}</code></pre>
+        </div>
+        <p>Keep APNs token callbacks on <code>AppDelegate</code> even when using SceneDelegate.</p>
+
+        <h2 id="events">Step 5 — Track clicks, dismissals &amp; actions</h2>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -&gt; Void
+) {
+    let userInfo = response.notification.request.content.userInfo
+    let type: String
+    let actionId: String
+
+    switch response.actionIdentifier {
+    case UNNotificationDismissActionIdentifier:
+        type = "dismissed"; actionId = "dismiss"
+    case UNNotificationDefaultActionIdentifier:
+        type = "clicked"; actionId = "clicked"
+    default:
+        type = "action"; actionId = response.actionIdentifier
+    }
+
+    BNotifyManager.shared.trackEvent(type: type, userInfo: userInfo, actionId: actionId)
+    // Optional: navigate from userInfo
+    completionHandler()
+}</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>User action</th><th>Suggested type</th><th>Suggested actionId</th></tr></thead>
+            <tbody>
+              <tr><td>Tap body</td><td><code>clicked</code></td><td><code>clicked</code></td></tr>
+              <tr><td>Dismiss</td><td><code>dismissed</code></td><td><code>dismiss</code></td></tr>
+              <tr><td>Tap Open</td><td><code>action</code></td><td><code>OPEN</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="foreground">Step 6 — Foreground display (optional)</h2>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -&gt; Void
+) {
+    if #available(iOS 14.0, *) {
+        completionHandler([.banner, .sound, .badge])
+    } else {
+        completionHandler([.alert, .sound, .badge])
+    }
+}</code></pre>
+        </div>
+
+        <h2 id="nse">Step 7 — Notification Service Extension (recommended)</h2>
+        <p>Use an NSE to report <code>received</code> and attach images for collapsed thumbnail + expanded media (GIF animates natively).</p>
+        <ol class="steps">
+          <li>File → New → Target → <strong>Notification Service Extension</strong>.</li>
+          <li>Link product <strong>BNotify</strong> to the extension.</li>
+          <li>Enable the same App Group on app + extension; set <code>appGroupId</code> in plist.</li>
+        </ol>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import UserNotifications
+import BNotify
+
+class NotificationService: UNNotificationServiceExtension {
+    var contentHandler: ((UNNotificationContent) -&gt; Void)?
+    var bestAttemptContent: UNMutableNotificationContent?
+
+    override func didReceive(
+        _ request: UNNotificationRequest,
+        withContentHandler contentHandler: @escaping (UNNotificationContent) -&gt; Void
+    ) {
+        self.contentHandler = contentHandler
+        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+        BNotifyExtensionSafe.prepareNotificationContent(request) { content in
+            contentHandler(content)
+        }
+    }
+
+    override func serviceExtensionTimeWillExpire() {
+        if let contentHandler, let bestAttemptContent {
+            contentHandler(bestAttemptContent)
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h2 id="inapp">In-app messages (Socket.IO)</h2>
+        <p>In-app campaigns are not delivered through APNs. They use the same Socket.IO contract as Android: <code>inapp:fetch</code>, <code>inapp:show</code>, <code>inapp:event</code>. Types: modal, card, top_banner, fullscreen, image.</p>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>BNotifyInApp.start() // optional; also starts from config load
+BNotifyInApp.logEvent("purchase_completed")</code></pre>
+        </div>
+
+        <h2 id="payload">APNs payload contract</h2>
+        <p>For NSE + rich media, include <code>mutable-content: 1</code> and put <code>imageUrl</code> as a sibling of <code>aps</code>:</p>
+        <div class="pre-wrap">
+          <span class="lang">JSON</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>{
+  "aps": {
+    "alert": { "title": "Hello", "body": "World" },
+    "sound": "default",
+    "mutable-content": 1,
+    "category": "bnotify"
+  },
+  "notificationId": "n-123",
+  "token": "&lt;device-or-tracking-token&gt;",
+  "imageUrl": "https://cdn.example.com/promo.gif",
+  "isExpanded": true
+}</code></pre>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Without mutable-content</div>
+          <p>If <code>mutable-content</code> is missing, the NSE may not run — no <code>received</code> tracking and no expanded image attachment.</p>
+        </div>
+
+        <h2 id="verify">Verification</h2>
+        <ol class="steps">
+          <li>Run on a physical device with Push capability.</li>
+          <li>Grant notification permission; confirm device token logs and backend registration (HTTP 200).</li>
+          <li>Send a test APNs push with <code>notificationId</code> and category <code>bnotify</code>.</li>
+          <li>Tap / dismiss → events appear in analytics.</li>
+          <li>With NSE: confirm <code>received</code> + image thumbnail / expand.</li>
+        </ol>
+
+        <h2 id="troubleshoot">Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>No token / registration fails</td><td>Push capability or provisioning</td><td>Enable Push on App ID; use real device</td></tr>
+              <tr><td>Text-only push, no image</td><td>Missing NSE / <code>mutable-content</code> / <code>imageUrl</code></td><td>Add NSE; put <code>imageUrl</code> outside <code>aps</code></td></tr>
+              <tr><td>App not found on register</td><td>Wrong <code>appId</code> / bundle</td><td>Match dashboard app + <code>packageName</code></td></tr>
+              <tr><td>No dismiss events</td><td>Category not <code>bnotify</code></td><td>Call <code>registerCategories()</code>; set category in payload</td></tr>
+              <tr><td>In-app never shows</td><td>Socket not connected</td><td>Confirm config load + network; check logs</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Need help?</div>
+          <p>See the <a href="faq.html">FAQ</a> or <a href="contact.html">contact support</a> at <a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a>.</p>
+        </div>
+
+        <footer class="footer">
+          <span>Previous: <a href="android.html">← Android</a> · Next: <a href="flutter.html">Flutter →</a></span>
+          <span>iOS SDK · SPM</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>

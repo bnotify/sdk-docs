@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Android Integration — BNotify SDK</title>
+  <meta name="description" content="Step-by-step guide to integrate the BNotify Android SDK via JitPack." />
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
+      <span class="brand-text mobile-only">b<span>notify</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
+      <a class="topbar-link" href="faq.html">FAQ</a>
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="https://jitpack.io/#bnotify/bnotifysdk" target="_blank" rel="noopener">JitPack</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <div class="nav-sub">
+          <a href="#prerequisites">Prerequisites</a>
+          <a href="#checklist">Checklist</a>
+          <a href="#step-1">Repositories</a>
+          <a href="#step-2">Plugin classpath</a>
+          <a href="#step-3">Dependency</a>
+          <a href="#step-4">Config JSON</a>
+          <a href="#step-5">Application</a>
+          <a href="#step-6">Manifest</a>
+          <a href="#step-7">MainActivity</a>
+          <a href="#step-8">MessagingService</a>
+          <a href="#permissions">Permissions</a>
+          <a href="#routing">Deep routing</a>
+          <a href="#inapp">In-app messaging</a>
+          <a href="#verify">Verification</a>
+          <a href="#troubleshoot">Troubleshooting</a>
+        </div>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <div class="page-kicker">Platform · Android</div>
+        <h1>Android SDK integration</h1>
+        <p class="lead">Add BNotify to any Android app with JitPack, the Gradle config plugin, and a few lifecycle hooks. After setup, devices register automatically and can receive pushes plus in-app campaigns.</p>
+
+        <div class="meta-row">
+          <span class="chip"><strong>Artifact</strong> bnotifysdk + bnotifyplugin</span>
+          <span class="chip"><strong>Version</strong> 1.0.4</span>
+          <span class="chip"><strong>minSdk</strong> 24</span>
+          <span class="chip"><strong>Source</strong> <a href="https://github.com/bnotify/bnotifysdk" target="_blank" rel="noopener">GitHub</a></span>
+        </div>
+
+        <div class="toc-inline">
+          <strong>On this page</strong>
+          <ol>
+            <li><a href="#what-you-get">What you get</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+            <li><a href="#step-1">Step 1 — Repositories</a></li>
+            <li><a href="#step-2">Step 2 — Plugin classpath</a></li>
+            <li><a href="#step-3">Step 3 — Dependency + plugin</a></li>
+            <li><a href="#step-4">Step 4 — Config JSON</a></li>
+            <li><a href="#step-5">Step 5 — Application init</a></li>
+            <li><a href="#step-6">Step 6 — Manifest</a></li>
+            <li><a href="#step-7">Step 7 — MainActivity</a></li>
+            <li><a href="#step-8">Step 8 — MessagingService</a></li>
+            <li><a href="#permissions">Permissions</a></li>
+            <li><a href="#routing">Screen routing</a></li>
+            <li><a href="#inapp">In-app messaging</a></li>
+            <li><a href="#verify">Verification</a></li>
+            <li><a href="#troubleshoot">Troubleshooting</a></li>
+          </ol>
+        </div>
+
+        <h2 id="what-you-get">What you get after integration</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Capability</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>Device registration</td><td>Socket.IO handshake with FCM token + device metadata</td></tr>
+              <tr><td>Push receive</td><td>Realtime via Socket.IO (+ optional FCM fallback)</td></tr>
+              <tr><td>System notification UI</td><td>Auto-shown by SDK (default)</td></tr>
+              <tr><td>Click / dismiss analytics</td><td>Emitted to BNotify server</td></tr>
+              <tr><td>Token callback</td><td><code>OnTokenListener.onNewToken</code></td></tr>
+              <tr><td>In-app campaigns</td><td>When server sends <code>inapp:show</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Backend delivers pushes</div>
+          <p>The Android SDK does not send notifications. Your BNotify backend delivers over Socket.IO / FCM. The SDK registers the device and displays / tracks messages.</p>
+        </div>
+
+        <h2 id="prerequisites">Prerequisites</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Requirement</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Android Studio + Kotlin DSL</td><td>Examples use <code>.kts</code></td></tr>
+              <tr><td><code>minSdk</code> ≥ 24</td><td>Matches SDK</td></tr>
+              <tr><td>Internet on device</td><td>Socket + API</td></tr>
+              <tr><td>BNotify credentials</td><td>For <code>bnotify-config.json</code></td></tr>
+              <tr><td>FCM values</td><td><code>fcmAppId</code>, <code>fcmProjectId</code>, <code>fcmApiKey</code>, <code>fcmSenderId</code></td></tr>
+              <tr><td>Physical device</td><td>Recommended for FCM / tray testing</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="checklist">Integration checklist</h2>
+        <ul class="checklist">
+          <li><span class="mark">1</span><span>Add JitPack to <code>settings.gradle.kts</code></span></li>
+          <li><span class="mark">2</span><span>Add plugin classpath in project <code>build.gradle.kts</code></span></li>
+          <li><span class="mark">3</span><span><code>implementation</code> SDK + <code>apply</code> plugin in app module</span></li>
+          <li><span class="mark">4</span><span>Add <code>app/bnotify-config.json</code></span></li>
+          <li><span class="mark">5</span><span>Sync Gradle → confirm <code>GeneratedConfig</code></span></li>
+          <li><span class="mark">6</span><span>Call <code>BNotifyApp.initializeBase</code> in <code>Application</code></span></li>
+          <li><span class="mark">7</span><span>Register custom <code>Application</code> in manifest</span></li>
+          <li><span class="mark">8</span><span><code>handleIntent</code> + token listener in launcher Activity</span></li>
+          <li><span class="mark">9</span><span>Subclass <code>BNotifyMessagingService</code> (recommended)</span></li>
+          <li><span class="mark opt">10</span><span>Handle <code>screen</code> extras for multi-screen routing</span></li>
+        </ul>
+
+        <h2 id="step-1">Step 1 — Repositories (<code>settings.gradle.kts</code>)</h2>
+        <p>Add JitPack so Gradle can resolve the SDK and plugin. Merge into existing blocks if present.</p>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}</code></pre>
+        </div>
+
+        <h2 id="step-2">Step 2 — Plugin classpath (project <code>build.gradle.kts</code>)</h2>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+}
+
+buildscript {
+    repositories {
+        maven(url = "https://jitpack.io")
+    }
+    dependencies {
+        classpath("com.github.bnotify.bnotifysdk:bnotifyplugin:1.0.4")
+    }
+}</code></pre>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">Coordinates</div>
+          <p>Library: <code>com.github.bnotify.bnotifysdk:bnotifysdk:1.0.4</code><br />
+          Plugin apply id: <code>com.github.bnotifysdk.bnotifyplugin</code><br />
+          Confirm on <a href="https://jitpack.io/#bnotify/bnotifysdk" target="_blank" rel="noopener">JitPack</a>.</p>
+        </div>
+
+        <h2 id="step-3">Step 3 — Dependency + plugin (app module)</h2>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace = "com.example.yourapp"
+    compileSdk = 36
+    defaultConfig {
+        applicationId = "com.example.yourapp"
+        minSdk = 24
+        targetSdk = 36
+    }
+}
+
+dependencies {
+    implementation("com.github.bnotify.bnotifysdk:bnotifysdk:1.0.4")
+}
+
+apply(plugin = "com.github.bnotifysdk.bnotifyplugin")</code></pre>
+        </div>
+        <p>On sync, the plugin reads <code>app/bnotify-config.json</code> and generates <code>GeneratedConfig.kt</code> under your <code>applicationId</code> package. Missing JSON fails the build with a clear error.</p>
+
+        <h2 id="step-4">Step 4 — Create <code>app/bnotify-config.json</code></h2>
+        <p>Path required by the plugin: <code>{projectRoot}/app/bnotify-config.json</code>.</p>
+        <div class="pre-wrap">
+          <span class="lang">JSON</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>{
+  "projectId": "your-project-id",
+  "packageName": "com.example.yourapp",
+  "apiKey": "your-api-key",
+  "authDomain": "",
+  "databaseURL": "",
+  "storageBucket": "",
+  "messagingSenderId": "",
+  "appId": "your-app-id",
+  "measurementId": "",
+  "fcmAppId": "1:1234567890:android:abcdef",
+  "fcmProjectId": "your-firebase-project-id",
+  "fcmApiKey": "AIzaSy...",
+  "fcmSenderId": "1234567890"
+}</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Field</th><th>Required</th><th>Used for</th></tr></thead>
+            <tbody>
+              <tr><td><code>projectId</code>, <code>appId</code>, <code>apiKey</code>, <code>packageName</code></td><td>Yes</td><td>Project / app identity</td></tr>
+              <tr><td><code>fcmAppId</code>, <code>fcmProjectId</code>, <code>fcmApiKey</code>, <code>fcmSenderId</code></td><td>Yes</td><td>Manual Firebase init</td></tr>
+              <tr><td>Other fields</td><td>Optional</td><td>Reserved / future</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="step-5">Step 5 — Application class</h2>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        BNotifyApp.initializeBase(
+            this,
+            MainActivity::class.java,
+            GeneratedConfig.JSON.toString()
+        )
+    }
+}</code></pre>
+        </div>
+        <p>Initialization saves config, sets the default click Activity, initializes Firebase from FCM fields, fetches the FCM token, connects Socket.IO, and registers in-app activity tracking. If your AAR exposes a four-argument overload (<code>app</code>, <code>context</code>, <code>activity</code>, <code>json</code>), pass <code>applicationContext</code> as the second argument.</p>
+
+        <h2 id="step-6">Step 6 — Manifest</h2>
+        <div class="pre-wrap">
+          <span class="lang">XML</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>&lt;application
+    android:name=".MyApplication"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:theme="@style/Theme.YourApp"&gt;
+
+    &lt;activity
+        android:name=".MainActivity"
+        android:exported="true"
+        android:launchMode="singleTop"&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name="android.intent.action.MAIN" /&gt;
+            &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/activity&gt;
+
+    &lt;service
+        android:name=".MyNotificationService"
+        android:exported="false" /&gt;
+&lt;/application&gt;</code></pre>
+        </div>
+        <div class="callout tip">
+          <div class="callout-title">launchMode</div>
+          <p>Use <code>singleTop</code> or <code>singleTask</code> on the click Activity so <code>onNewIntent</code> runs when the app is already open.</p>
+        </div>
+
+        <h2 id="step-7">Step 7 — MainActivity wiring</h2>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    BNotifyApp.handleIntent(applicationContext, intent)
+
+    BNotifyApp.setOnTokenListener(object : BNotifyApp.OnTokenListener {
+        override fun onNewToken(token: String?) {
+            Log.d("BNotify_Token", "BNotify Token: $token")
+        }
+    })
+
+    intent.getStringExtra("screen")?.let { screen -&gt;
+        if (screen.equals("Test", true)) {
+            BNotifyApp.setActivityToOpenOnClick(TestActivity::class.java)
+            startActivity(Intent(this, TestActivity::class.java))
+            finish()
+        }
+    }
+}
+
+override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    setIntent(intent)
+    BNotifyApp.handleIntent(applicationContext, intent)
+}</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Call</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td><code>handleIntent</code></td><td>Permission path, click extras, service restart</td></tr>
+              <tr><td><code>setOnTokenListener</code></td><td>BNotify token after socket registration</td></tr>
+              <tr><td><code>setActivityToOpenOnClick</code></td><td>Which Activity future taps should open</td></tr>
+              <tr><td><code>onNewIntent</code></td><td>Required when app is already in memory</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="step-8">Step 8 — Custom MessagingService</h2>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>class MyNotificationService : BNotifyMessagingService() {
+    override fun activityToOpenOnClick(): Class&lt;out Activity&gt; {
+        return MainActivity::class.java
+    }
+
+    override fun onMessageReceived(remoteMessage: NotificationModel?) {
+        Log.i("BNotify", "title: ${remoteMessage?.title}")
+        // Custom UI when auto-notifications are disabled
+    }
+}</code></pre>
+        </div>
+
+        <h2 id="permissions">Notification permission (Android 13+)</h2>
+        <p>The SDK declares <code>POST_NOTIFICATIONS</code>. For better UX, also request from your Activity:</p>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.TIRAMISU) {
+    ActivityCompat.requestPermissions(
+        this,
+        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+        1001
+    )
+}</code></pre>
+        </div>
+
+        <h2 id="routing">Screen / deep routing</h2>
+        <p>Send a <code>screen</code> field in the notification payload. The SDK places it in click Intent extras — <strong>your app</strong> decides navigation (<code>home</code>, <code>Test</code>, or any custom route).</p>
+
+        <h2 id="inapp">In-app messaging</h2>
+        <p>In-app campaigns arrive over Socket.IO (<code>inapp:show</code>), not FCM. Types include modal, card, top banner, fullscreen, and image. They can appear even if the user denied system notification permission, as long as the socket is connected after <code>initializeBase</code>.</p>
+
+        <h2 id="verify">Verification</h2>
+        <ol class="steps">
+          <li>Install on a physical device with network access.</li>
+          <li>Confirm logs show Socket connect + BNotify token callback.</li>
+          <li>Send a test push from the BNotify dashboard.</li>
+          <li>Tap the notification → Activity opens → click event tracked.</li>
+          <li>Bring app to foreground → in-app fetch / show if campaigns exist.</li>
+        </ol>
+
+        <h2 id="troubleshoot">Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead>
+            <tbody>
+              <tr><td>Gradle cannot resolve artifact</td><td>Missing JitPack repo</td><td>Add <code>maven { url = uri("https://jitpack.io") }</code> to both management blocks</td></tr>
+              <tr><td><code>No bnotify-config.json</code></td><td>Wrong path</td><td>File must be <code>app/bnotify-config.json</code></td></tr>
+              <tr><td>No tray notification on API 33+</td><td>Permission denied</td><td>Request <code>POST_NOTIFICATIONS</code></td></tr>
+              <tr><td>Tap does nothing when app open</td><td>Missing <code>onNewIntent</code></td><td>Forward intent + use <code>singleTop</code></td></tr>
+              <tr><td>No device on dashboard</td><td>Bad credentials / network</td><td>Verify JSON fields and Socket connectivity</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Need help?</div>
+          <p>See the <a href="faq.html">FAQ</a> or <a href="contact.html">contact support</a> at <a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a>.</p>
+        </div>
+
+        <footer class="footer">
+          <span>Next: <a href="ios.html">iOS integration →</a></span>
+          <span>Android SDK 1.0.4</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>

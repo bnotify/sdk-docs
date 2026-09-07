@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BNotify SDK Documentation</title>
+  <meta name="description" content="Integrate BNotify push notifications and in-app messaging into Android, iOS, Flutter, and React Native apps." />
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
+      <span class="brand-text mobile-only">b<span>notify</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
+      <a class="topbar-link" href="faq.html">FAQ</a>
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="android.html">Get Started</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <section class="hero">
+          <div class="hero-copy">
+            <div class="page-kicker" style="color:#ffb3b6;">Mobile Notification Platform</div>
+            <h1>Ship push &amp; in-app messaging with BNotify SDK</h1>
+            <p>Production-ready SDKs for Android and iOS. Flutter and React Native are on the roadmap. Follow platform guides to register devices, deliver notifications, and track engagement.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="android.html">Android guide</a>
+              <a class="btn btn-secondary" href="ios.html">iOS guide</a>
+            </div>
+          </div>
+          <div class="hero-brand">
+            <img src="assets/img/logo.png" alt="bnotify.com — Mobile Notification Platform" />
+          </div>
+        </section>
+
+        <h2>Choose your platform</h2>
+        <p class="lead">Each guide is self-contained: repositories, config files, initialization, permissions, and verification. Start with the platform that matches your app.</p>
+
+        <div class="card-grid">
+          <a class="platform-card" href="android.html">
+            <div class="card-icon">AND</div>
+            <h3>Android</h3>
+            <p>JitPack library + Gradle plugin. Socket.IO delivery with FCM fallback, system notifications, and in-app campaigns.</p>
+            <div class="card-foot">
+              <span class="badge badge-live">Available</span>
+              <span>minSdk 24 · v1.0.4</span>
+            </div>
+          </a>
+          <a class="platform-card" href="ios.html">
+            <div class="card-icon">iOS</div>
+            <h3>iOS</h3>
+            <p>Swift Package Manager. APNs registration, click/dismiss analytics, Notification Service Extension for images &amp; delivery events.</p>
+            <div class="card-foot">
+              <span class="badge badge-live">Available</span>
+              <span>iOS 13+</span>
+            </div>
+          </a>
+          <div class="platform-card disabled">
+            <div class="card-icon soon">FL</div>
+            <h3>Flutter</h3>
+            <p>Unified Dart plugin bridging native Android and iOS BNotify SDKs. Pub package and sample app are in development.</p>
+            <div class="card-foot">
+              <span class="badge badge-soon">Coming soon</span>
+              <span>Notify me via Contact</span>
+            </div>
+          </div>
+          <div class="platform-card disabled">
+            <div class="card-icon soon">RN</div>
+            <h3>React Native</h3>
+            <p>Native module for Expo and bare React Native workflows. Integration docs will mirror Android / iOS capabilities.</p>
+            <div class="card-foot">
+              <span class="badge badge-soon">Coming soon</span>
+              <span>Notify me via Contact</span>
+            </div>
+          </div>
+        </div>
+
+        <h2>What BNotify provides</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th>Android</th>
+                <th>iOS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Device registration</td>
+                <td>Socket.IO + FCM token</td>
+                <td>APNs token → REST API</td>
+              </tr>
+              <tr>
+                <td>System push UI</td>
+                <td>Auto tray notifications</td>
+                <td>APNs + optional NSE media</td>
+              </tr>
+              <tr>
+                <td>Click / dismiss analytics</td>
+                <td>Built into SDK flow</td>
+                <td>Host calls <code>trackEvent</code></td>
+              </tr>
+              <tr>
+                <td>In-app messages</td>
+                <td>Socket.IO campaigns</td>
+                <td>Socket.IO campaigns</td>
+              </tr>
+              <tr>
+                <td>Expanded images / GIF</td>
+                <td>BigPicture + GIF frames</td>
+                <td>NSE attachments</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Important</div>
+          <p>SDKs do <strong>not</strong> send pushes by themselves. Your BNotify backend delivers messages (Socket.IO / FCM on Android, APNs on iOS). The SDK registers the device, displays content, and reports events.</p>
+        </div>
+
+        <h2>Quick links</h2>
+        <ul class="clean">
+          <li>Android package: <a href="https://jitpack.io/#bnotify/bnotifysdk" target="_blank" rel="noopener">jitpack.io/#bnotify/bnotifysdk</a></li>
+          <li>Android source: <a href="https://github.com/bnotify/bnotifysdk" target="_blank" rel="noopener">github.com/bnotify/bnotifysdk</a></li>
+          <li>iOS SPM: <a href="https://gitlab.com/hamza.hafeez/bnotifyiossdk" target="_blank" rel="noopener">gitlab.com/hamza.hafeez/bnotifyiossdk</a></li>
+          <li>Support: <a href="contact.html">Contact</a> · <a href="faq.html">FAQ</a></li>
+        </ul>
+
+        <footer class="footer">
+          <span>© <a href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a> · Mobile Notification Platform</span>
+          <span>Docs version 1.0 · Platforms: Android, iOS (Flutter &amp; RN coming soon)</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>

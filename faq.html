@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — BNotify SDK</title>
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify.com" />
+      <span class="brand-text mobile-only">b<span>notify</span></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="contact.html">Get support</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+    <main class="content">
+      <div class="content-inner">
+        <div class="page-kicker">Support</div>
+        <h1>Frequently asked questions</h1>
+        <p class="lead">Short answers to the questions teams ask most when integrating BNotify. For anything not covered here, use the <a href="contact.html">contact form</a>.</p>
+
+        <div class="faq">
+          <details open>
+            <summary>Does the SDK send push notifications?</summary>
+            <p>No. BNotify SDKs register the device and display / track messages. Your BNotify backend delivers pushes (Socket.IO / FCM on Android, APNs on iOS).</p>
+          </details>
+          <details>
+            <summary>Which platforms are available today?</summary>
+            <p><strong>Android</strong> (JitPack 1.0.4) and <strong>iOS</strong> (SPM on GitLab) are production-ready. <strong>Flutter</strong> and <strong>React Native</strong> are coming soon.</p>
+          </details>
+          <details>
+            <summary>Where do I get credentials?</summary>
+            <p>From the BNotify dashboard: download <code>bnotify-config.json</code> (Android) or <code>bnotify-config.plist</code> (iOS). You need <code>projectId</code>, <code>appId</code>, <code>apiKey</code>, and platform-specific FCM / APNs setup.</p>
+          </details>
+          <details>
+            <summary>What is the Android Maven coordinate?</summary>
+            <p><code>implementation("com.github.bnotify.bnotifysdk:bnotifysdk:1.0.4")</code> with JitPack repository. Plugin: <code>com.github.bnotify.bnotifysdk:bnotifyplugin:1.0.4</code>, apply id <code>com.github.bnotifysdk.bnotifyplugin</code>.</p>
+          </details>
+          <details>
+            <summary>What is the iOS package URL?</summary>
+            <p><code>https://gitlab.com/hamza.hafeez/bnotifyiossdk.git</code> — add the product named <code>BNotify</code>.</p>
+          </details>
+          <details>
+            <summary>Why don’t notifications appear on Android 13+?</summary>
+            <p>Runtime <code>POST_NOTIFICATIONS</code> permission is required. Request it from your Activity and ensure the user grants it.</p>
+          </details>
+          <details>
+            <summary>Why is my iOS push text-only with no image?</summary>
+            <p>Add a Notification Service Extension, set <code>aps["mutable-content"] = 1</code>, and send <code>imageUrl</code> as a top-level key (sibling of <code>aps</code>). Call <code>BNotifyExtensionSafe.prepareNotificationContent</code>.</p>
+          </details>
+          <details>
+            <summary>Are in-app messages the same as pushes?</summary>
+            <p>No. In-app campaigns use Socket.IO (<code>inapp:show</code>) and render inside the app. System tray pushes use FCM/Socket (Android) or APNs (iOS).</p>
+          </details>
+          <details>
+            <summary>Can I use the SDKs offline / without a dashboard project?</summary>
+            <p>Device registration and delivery require valid project credentials and network access to the BNotify host.</p>
+          </details>
+          <details>
+            <summary>How do I get help for Flutter or React Native?</summary>
+            <p>Those SDKs are not published yet. Email <a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a> for roadmap or early-access interest.</p>
+          </details>
+          <details>
+            <summary>Is there a sample / demo app?</summary>
+            <p>Yes — the Android demo lives under the BNotify project workspace, and an iOS demo project is available separately. Follow the platform guides for the exact wiring those demos use.</p>
+          </details>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Still stuck?</div>
+          <p>Open <a href="contact.html">Contact</a> and include platform, SDK version, and a short log excerpt (redact API keys).</p>
+        </div>
+
+        <footer class="footer">
+          <span><a href="react-native.html">← React Native</a> · <a href="contact.html">Contact →</a></span>
+          <span>BNotify FAQ</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>
