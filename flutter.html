@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Flutter — BNotify SDK (Coming Soon)</title>
+  <title>Flutter Integration — BNotify SDK</title>
+  <meta name="description" content="Step-by-step guide to integrate the BNotify Flutter SDK from pub.dev." />
   <link rel="icon" href="assets/img/icon.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,7 +27,8 @@
       <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
       <a class="topbar-link" href="https://console.bnotify.com/projects" target="_blank" rel="noopener">Console</a>
       <a class="topbar-link" href="faq.html">FAQ</a>
-      <a class="btn btn-primary" href="contact.html">Notify me</a>
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="https://pub.dev/packages/bnotify_flutter" target="_blank" rel="noopener">pub.dev</a>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Dark theme">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -34,6 +36,7 @@
       <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
     </div>
   </header>
+
   <div class="layout">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-section">
@@ -46,7 +49,20 @@
         <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="web.html" href="web.html">Web <span class="badge badge-soon">Soon</span></a>
-        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-live">Live</span></a>
+        <div class="nav-sub">
+          <a href="#prerequisites">Prerequisites</a>
+          <a href="#checklist">Checklist</a>
+          <a href="#console">Console</a>
+          <a href="#pub">Add the package</a>
+          <a href="#dart">Dart initialize</a>
+          <a href="#android">Android host</a>
+          <a href="#ios">iOS host</a>
+          <a href="#inapp">In-app</a>
+          <a href="#routing">Tap routing</a>
+          <a href="#verify">Verification</a>
+          <a href="#troubleshoot">Troubleshooting</a>
+        </div>
         <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
       </div>
       <div class="sidebar-section">
@@ -56,39 +72,307 @@
         <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
       </div>
     </aside>
+
     <main class="content">
       <div class="content-inner">
         <div class="page-kicker">Platform · Flutter</div>
-        <h1>Flutter SDK <span class="badge badge-soon">Coming soon</span></h1>
-        <p class="lead">A Dart plugin for BNotify is in development. When published, you will add a pub dependency, initialize once in Dart, and add the same dashboard config files used by the native SDKs.</p>
+        <h1>Flutter SDK integration</h1>
+        <p class="lead">Add BNotify to any Flutter app with the <code>bnotify_flutter</code> package. After setup, devices register automatically and can receive pushes plus in-app campaigns on Android and iOS. Web is not supported.</p>
 
-        <div class="callout warn">
-          <div class="callout-title">Not available yet</div>
-          <p>There is no pub.dev package to install today. Use <a href="android.html">Android</a> or <a href="ios.html">iOS</a> native SDKs for production apps, or <a href="contact.html">contact us</a> for early access.</p>
+        <div class="callout info">
+          <div class="callout-title">Create the apps in Console first</div>
+          <p>Before Dart setup, <a href="console.html">create a project, register Android and iOS apps</a>, and download <code>bnotify-config.json</code> plus <code>bnotify-config.plist</code>. Package name and bundle id must match the Flutter app.</p>
         </div>
 
-        <h2>Planned integration shape</h2>
+        <div class="meta-row">
+          <span class="chip"><strong>Package</strong> bnotify_flutter</span>
+          <span class="chip"><strong>Version</strong> 0.1.0</span>
+          <span class="chip"><strong>minSdk</strong> 24</span>
+          <span class="chip"><strong>iOS</strong> 13+</span>
+          <span class="chip"><strong>pub.dev</strong> <a href="https://pub.dev/packages/bnotify_flutter" target="_blank" rel="noopener">bnotify_flutter</a></span>
+        </div>
+
+        <div class="toc-inline">
+          <strong>On this page</strong>
+          <ol>
+            <li><a href="#what-you-get">What you get</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+            <li><a href="#console">Step 1 — Console</a></li>
+            <li><a href="#pub">Step 2 — Add the package</a></li>
+            <li><a href="#dart">Step 3 — Dart initialize</a></li>
+            <li><a href="#android">Step 4 — Android host</a></li>
+            <li><a href="#ios">Step 5 — iOS host</a></li>
+            <li><a href="#inapp">In-app campaigns</a></li>
+            <li><a href="#routing">Notification tap routing</a></li>
+            <li><a href="#verify">Verification</a></li>
+            <li><a href="#troubleshoot">Troubleshooting</a></li>
+          </ol>
+        </div>
+
+        <h2 id="what-you-get">What you get after integration</h2>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Step</th><th>Expectation</th></tr></thead>
+            <thead><tr><th>Capability</th><th>Result</th></tr></thead>
             <tbody>
-              <tr><td>Dependency</td><td><code>bnotify: ^x.y.z</code> on pub.dev</td></tr>
-              <tr><td>Android config</td><td><code>bnotify-config.json</code> from the dashboard</td></tr>
-              <tr><td>iOS config</td><td><code>bnotify-config.plist</code> + Push capability</td></tr>
-              <tr><td>Dart API</td><td>Initialize, token stream, click handlers, in-app events</td></tr>
+              <tr><td>Device registration</td><td>Device appears in the BNotify dashboard after <code>initialize</code> + permission</td></tr>
+              <tr><td>Push notifications</td><td>System notifications on Android and iOS</td></tr>
+              <tr><td>Background / killed app</td><td>Notifications can still arrive after the first successful init</td></tr>
+              <tr><td>Notification tap</td><td>Dart <code>BNotify.onClick</code> with a <code>screen</code> value you can route on</td></tr>
+              <tr><td>In-app messages</td><td>Native in-app UI when Console campaigns match events you log</td></tr>
+              <tr><td>Device token</td><td>Dart <code>BNotify.onToken</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Dashboard delivers campaigns</div>
+          <p>The Flutter SDK does not send campaigns. Create and send messages from the BNotify dashboard. The SDK registers the device, displays messages, and reports engagement.</p>
+        </div>
+
+        <h2 id="prerequisites">Prerequisites</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Requirement</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Flutter 3.24+ / Dart 3.13+</td><td>Matches the plugin <code>pubspec.yaml</code></td></tr>
+              <tr><td>Android + iOS only</td><td>No web implementation</td></tr>
+              <tr><td>BNotify Console account</td><td>Project + Android app + iOS app</td></tr>
+              <tr><td>Android <code>minSdk</code> 24</td><td>Required</td></tr>
+              <tr><td>iOS 13.0+</td><td>Required</td></tr>
+              <tr><td>Physical devices</td><td>Recommended for push testing</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h2>Meanwhile</h2>
-        <ul class="clean">
-          <li>Ship with native <a href="android.html">Android</a> / <a href="ios.html">iOS</a> modules from a Flutter add-to-app or platform channel bridge.</li>
-          <li>Ask for roadmap updates via <a href="contact.html">Contact</a> (email: <a href="mailto:bnotify93@gmail.com">bnotify93@gmail.com</a>).</li>
+        <h2 id="checklist">Integration checklist</h2>
+        <ul class="checklist">
+          <li><span class="mark">1</span><span>Register Android and iOS apps in Console with the exact <code>applicationId</code> / bundle id</span></li>
+          <li><span class="mark">2</span><span>Download <code>bnotify-config.json</code> and <code>bnotify-config.plist</code></span></li>
+          <li><span class="mark">3</span><span>Add <code>bnotify_flutter: ^0.1.0</code> and run <code>flutter pub get</code></span></li>
+          <li><span class="mark">4</span><span>Place JSON as a Flutter asset and at <code>android/app/bnotify-config.json</code></span></li>
+          <li><span class="mark">5</span><span>Android: JitPack, minSdk 24, <code>BNotifyFlutterActivity</code>, <code>singleTask</code>, AppCompat themes</span></li>
+          <li><span class="mark">6</span><span>iOS: plist on Runner, Push capability, optional Notification Service Extension</span></li>
+          <li><span class="mark">7</span><span>Dart: subscribe to streams, <code>initialize</code>, then <code>requestPermission</code></span></li>
+          <li><span class="mark">8</span><span>Send a test campaign from the Console</span></li>
         </ul>
+
+        <h2 id="console">Step 1 — Console</h2>
+        <p>Open the <a href="https://console.bnotify.com/" target="_blank" rel="noopener">BNotify Console</a>. Create a project, then register:</p>
+        <ul class="clean">
+          <li>An <strong>Android</strong> app whose package name equals <code>applicationId</code> in <code>android/app/build.gradle.kts</code></li>
+          <li>An <strong>iOS</strong> app whose bundle id equals the Runner bundle identifier</li>
+        </ul>
+        <p>Download <code>bnotify-config.json</code> and <code>bnotify-config.plist</code>. Do not commit real keys to a public repository. Full walkthrough: <a href="console.html">Create a project</a>.</p>
+
+        <h2 id="pub">Step 2 — Add the package</h2>
+        <p>Install from <a href="https://pub.dev/packages/bnotify_flutter" target="_blank" rel="noopener">pub.dev</a>.</p>
+        <div class="pre-wrap">
+          <span class="lang">YAML</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>dependencies:
+  bnotify_flutter: ^0.1.0
+
+flutter:
+  assets:
+    - assets/bnotify-config.json</code></pre>
+        </div>
+        <p>Then run <code>flutter pub get</code>. Copy the Console files to:</p>
+        <ul class="clean">
+          <li><code>assets/bnotify-config.json</code></li>
+          <li><code>android/app/bnotify-config.json</code> (same JSON — required so Android can start when a notification creates the process)</li>
+          <li><code>ios/Runner/bnotify-config.plist</code></li>
+        </ul>
+        <p>Source repository: <a href="https://gitlab.com/hamza.hafeez/BNotifyFlutterSDK" target="_blank" rel="noopener">gitlab.com/hamza.hafeez/BNotifyFlutterSDK</a>.</p>
+
+        <h2 id="dart">Step 3 — Dart initialize, permission, and listeners</h2>
+        <p>Subscribe to streams <strong>before</strong> <code>initialize</code> so you do not miss a token or a cold-start tap.</p>
+        <div class="pre-wrap">
+          <span class="lang">Dart</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import 'package:bnotify_flutter/bnotify_flutter.dart';
+import 'package:flutter/material.dart';
+
+Future&lt;void&gt; main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  BNotify.onToken.listen((token) {
+    debugPrint('BNotify token: $token');
+  });
+  BNotify.onMessage.listen((message) {
+    debugPrint('BNotify message: ${message.title} ${message.body}');
+  });
+  BNotify.onClick.listen((click) {
+    debugPrint('BNotify click screen=${click.screen}');
+  });
+
+  await BNotify.initialize(
+    configAsset: 'assets/bnotify-config.json',
+  );
+
+  runApp(const MyApp());
+}</code></pre>
+        </div>
+        <p>After the first frame (or from a settings screen), request notification permission:</p>
+        <div class="pre-wrap">
+          <span class="lang">Dart</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>await BNotify.requestPermission();</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>API</th><th>When to call</th></tr></thead>
+            <tbody>
+              <tr><td><code>BNotify.initialize</code></td><td>Once per process, after <code>ensureInitialized</code></td></tr>
+              <tr><td><code>BNotify.requestPermission</code></td><td>Android 13+ / iOS notification permission</td></tr>
+              <tr><td><code>BNotify.logEvent('…')</code></td><td>Match an in-app campaign trigger</td></tr>
+              <tr><td><code>BNotify.onToken</code></td><td>Device token stream</td></tr>
+              <tr><td><code>BNotify.onMessage</code></td><td>Incoming payload (optional if system UI is on)</td></tr>
+              <tr><td><code>BNotify.onClick</code></td><td>Route after a notification tap</td></tr>
+              <tr><td><code>BNotify.setAutoNotifications</code></td><td>Android only: system tray vs custom UI</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>configAsset</code> is read on Android. iOS uses <code>ios/Runner/bnotify-config.plist</code>. Pass <code>configAsset</code> anyway so one <code>initialize</code> call works on both platforms.</p>
+        <p>Hot reload does not re-run native Kotlin/Swift. After changing <code>MainActivity</code>, manifests, or the plist, do a full restart.</p>
+
+        <h2 id="android">Step 4 — Android host setup</h2>
+        <p>Do every item in this section. Skipping the Activity or theme steps is the usual reason in-app messages never appear.</p>
+
+        <h3>JitPack + minSdk 24</h3>
+        <p>Add JitPack in <code>android/settings.gradle.kts</code> (<code>pluginManagement.repositories</code>) and in <code>android/build.gradle.kts</code> repositories:</p>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>maven { url = uri("https://jitpack.io") }</code></pre>
+        </div>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>defaultConfig {
+    applicationId = "com.example.my_app" // must match Console
+    minSdk = 24
+}</code></pre>
+        </div>
+
+        <h3>Copy config into Android assets</h3>
+        <p>Keep <code>android/app/bnotify-config.json</code>. Add this above the <code>android { }</code> block in <code>android/app/build.gradle.kts</code>:</p>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>val bnotifyConfigFile = file("bnotify-config.json")
+val bnotifyAssetsDir = file("src/main/assets")
+
+tasks.register&lt;Copy&gt;("copyBnotifyConfigAsset") {
+    from(bnotifyConfigFile)
+    into(bnotifyAssetsDir)
+    onlyIf { bnotifyConfigFile.exists() }
+}
+
+tasks.matching { it.name == "preBuild" }.configureEach {
+    dependsOn("copyBnotifyConfigAsset")
+}</code></pre>
+        </div>
+
+        <h3>MainActivity must extend <code>BNotifyFlutterActivity</code></h3>
+        <p>Do not extend <code>FlutterActivity</code> or <code>FlutterFragmentActivity</code>.</p>
+        <div class="pre-wrap">
+          <span class="lang">Kotlin</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import com.convex.bnotify_flutter.BNotifyFlutterActivity
+
+class MainActivity : BNotifyFlutterActivity()</code></pre>
+        </div>
+
+        <h3>Manifest and themes</h3>
+        <p>Use <code>android:launchMode="singleTask"</code>. Do <strong>not</strong> set <code>android:taskAffinity=""</code> (that creates two Recents cards). <code>LaunchTheme</code> and <code>NormalTheme</code> must use <code>Theme.AppCompat.*</code> (for example <code>Theme.AppCompat.Light.NoActionBar</code>).</p>
+        <p>Call <code>BNotify.requestPermission()</code> at runtime on Android 13+. Keep the <code>INTERNET</code> permission.</p>
+
+        <h2 id="ios">Step 5 — iOS host setup</h2>
+        <ol>
+          <li>Copy <code>bnotify-config.plist</code> to <code>ios/Runner/bnotify-config.plist</code> and enable <strong>Target Membership → Runner</strong>.</li>
+          <li>In Xcode → Signing &amp; Capabilities, add <strong>Push Notifications</strong>.</li>
+          <li>Minimum iOS 13. If you use Flutter’s Swift Package Manager path: <code>flutter config --enable-swift-package-manager</code>.</li>
+        </ol>
+        <p>A stock <code>FlutterAppDelegate</code> is enough. You do not need to call native BNotify APIs from <code>AppDelegate</code> for basic push.</p>
+
+        <h3>Notification Service Extension (images)</h3>
+        <p>To show images in the banner, add a Notification Service Extension, add the iOS SDK (<a href="https://gitlab.com/hamza.hafeez/bnotifyiossdk.git" target="_blank" rel="noopener">bnotifyiossdk</a>, product <code>BNotify</code>), enable the same App Group on Runner and the extension, then call:</p>
+        <div class="pre-wrap">
+          <span class="lang">Swift</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>BNotifyExtensionSafe.prepareNotificationContent(
+    request,
+    appGroupId: bnotifyAppGroupId
+) { content in
+    contentHandler(content)
+}</code></pre>
+        </div>
+        <p>Without an extension, text notifications still work. See the <a href="ios.html#nse">iOS NSE section</a> for the full native pattern.</p>
+
+        <h2 id="inapp">In-app campaigns</h2>
+        <p>In the Console, create an in-app campaign whose trigger name matches a string you log (for example <code>app_open</code>):</p>
+        <div class="pre-wrap">
+          <span class="lang">Dart</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>await BNotify.logEvent('app_open');</code></pre>
+        </div>
+        <p>The name must match the Console trigger exactly. Android in-app UI requires <code>BNotifyFlutterActivity</code> and AppCompat themes.</p>
+
+        <h2 id="routing">Notification tap routing</h2>
+        <p>Listen to <code>BNotify.onClick</code> and use <code>click.screen</code> (set on the campaign in the Console) to navigate. Subscribe in <code>main()</code> before <code>initialize</code> so a tap that opened a killed app still reaches Dart.</p>
+        <div class="pre-wrap">
+          <span class="lang">Dart</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>BNotify.onClick.listen((click) {
+  final screen = click.screen;
+  if (screen == null || screen.isEmpty) return;
+  navigatorKey.currentState?.pushNamed(screen);
+});</code></pre>
+        </div>
+        <p>Optional: <code>await BNotify.setAutoNotifications(false)</code> on Android to draw your own UI from <code>onMessage</code>. iOS always uses the system notification UI.</p>
+
+        <h2 id="verify">Verification</h2>
+        <p>Use a physical device and real Console files (not placeholders).</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Test</th><th>Expected</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Cold start, <code>initialize</code></td><td>No exception; <code>onToken</code> prints a token</td></tr>
+              <tr><td>2</td><td><code>requestPermission</code></td><td>System dialog; user allows</td></tr>
+              <tr><td>3</td><td>Console device list</td><td>This install appears</td></tr>
+              <tr><td>4</td><td>Send a push, app backgrounded or swiped away</td><td>Tray / banner notification</td></tr>
+              <tr><td>5</td><td>Tap the notification</td><td><code>onClick</code> fires; one Recents card</td></tr>
+              <tr><td>6</td><td><code>logEvent</code> with a matching campaign</td><td>In-app UI appears</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="troubleshoot">Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Symptom</th><th>What to check</th></tr></thead>
+            <tbody>
+              <tr><td><code>initialize</code> throws missing config</td><td>Asset listed in <code>pubspec.yaml</code>; iOS plist on the Runner target</td></tr>
+              <tr><td>No token</td><td>Permission denied; package/bundle ≠ Console; placeholder keys</td></tr>
+              <tr><td>Pushes only while the UI is open</td><td>Android JSON not packaged as an asset; first init never succeeded</td></tr>
+              <tr><td>Two Recents cards</td><td>Remove empty <code>taskAffinity</code>; use <code>singleTask</code></td></tr>
+              <tr><td>In-app never shows (Android)</td><td><code>MainActivity</code> still extends <code>FlutterActivity</code>; themes not AppCompat; full rebuild</td></tr>
+              <tr><td>Launch crash (Android theme)</td><td><code>LaunchTheme</code> / <code>NormalTheme</code> must use <code>Theme.AppCompat.*</code></td></tr>
+              <tr><td>Gradle cannot find <code>bnotifysdk</code></td><td>JitPack missing from Gradle repositories</td></tr>
+              <tr><td><code>minSdk</code> error</td><td>Set <code>minSdk = 24</code> in the app module</td></tr>
+              <tr><td>iOS images missing</td><td>No Notification Service Extension / App Group</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Production</div>
+          <p>Pin <code>bnotify_flutter: ^0.1.0</code>, keep Console files out of public git, test <code>onClick</code> from a killed app, and complete APNs / Play signing as usual.</p>
+        </div>
 
         <footer class="footer">
           <span><a href="web.html">← Web</a> · <a href="react-native.html">React Native →</a></span>
-          <span>Flutter · Coming soon</span>
+          <span>Flutter · bnotify_flutter 0.1.0</span>
         </footer>
       </div>
     </main>

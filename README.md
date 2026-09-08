@@ -1,6 +1,6 @@
 # BNotify SDK Documentation
 
-Platform integration guides for the BNotify SDKs (Android, iOS; Web, Flutter & React Native coming soon).
+Platform integration guides for the BNotify SDKs (Android, iOS, Flutter; Web & React Native coming soon).
 
 ## Live docs
 
@@ -23,7 +23,7 @@ python3 -m http.server 8080
 | `android.html` | Android (JitPack) |
 | `ios.html` | iOS (SPM) |
 | `web.html` | Web — coming soon |
-| `flutter.html` | Flutter — coming soon |
+| `flutter.html` | Flutter (`bnotify_flutter` on pub.dev) |
 | `react-native.html` | React Native — coming soon |
 | `faq.html` | FAQ |
 | `contact.html` | Contact |

@@ -49,7 +49,7 @@
         <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="web.html" href="web.html">Web <span class="badge badge-soon">Soon</span></a>
-        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-live">Live</span></a>
         <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
       </div>
       <div class="sidebar-section">
@@ -66,10 +66,11 @@
           <div class="hero-copy">
             <div class="page-kicker">Mobile Notification Platform</div>
             <h1>Ship push &amp; in-app messaging with BNotify SDK</h1>
-            <p>Production-ready SDKs for Android and iOS. Web, Flutter, and React Native are on the roadmap. Create a Console project first, then follow the platform guide.</p>
+            <p>Production-ready SDKs for Android, iOS, and Flutter. Web and React Native are on the roadmap. Create a Console project first, then follow the platform guide.</p>
             <div class="hero-actions">
               <a class="btn btn-primary" href="console.html">Create a project</a>
               <a class="btn btn-secondary" href="android.html">Android guide</a>
+              <a class="btn btn-secondary" href="flutter.html">Flutter guide</a>
             </div>
           </div>
           <div class="hero-brand">
@@ -108,15 +109,15 @@
               <span>Notify me via Contact</span>
             </div>
           </a>
-          <div class="platform-card disabled">
-            <div class="card-icon soon">FL</div>
+          <a class="platform-card" href="flutter.html">
+            <div class="card-icon">FL</div>
             <h3>Flutter</h3>
-            <p>Unified Dart plugin bridging native Android and iOS BNotify SDKs. Pub package and sample app are in development.</p>
+            <p>Add the Dart plugin from pub.dev. It wraps the native Android and iOS BNotify SDKs for push and in-app messaging.</p>
             <div class="card-foot">
-              <span class="badge badge-soon">Coming soon</span>
-              <span>Notify me via Contact</span>
+              <span class="badge badge-live">Available</span>
+              <span>bnotify_flutter 0.1.0</span>
             </div>
-          </div>
+          </a>
           <div class="platform-card disabled">
             <div class="card-icon soon">RN</div>
             <h3>React Native</h3>
@@ -180,12 +181,14 @@
           <li>Android package: <a href="https://jitpack.io/#bnotify/bnotifysdk" target="_blank" rel="noopener">jitpack.io/#bnotify/bnotifysdk</a></li>
           <li>Android source: <a href="https://github.com/bnotify/bnotifysdk" target="_blank" rel="noopener">github.com/bnotify/bnotifysdk</a></li>
           <li>iOS SPM: <a href="https://gitlab.com/hamza.hafeez/bnotifyiossdk" target="_blank" rel="noopener">gitlab.com/hamza.hafeez/bnotifyiossdk</a></li>
+          <li>Flutter pub.dev: <a href="https://pub.dev/packages/bnotify_flutter" target="_blank" rel="noopener">pub.dev/packages/bnotify_flutter</a></li>
+          <li>Flutter source: <a href="https://gitlab.com/hamza.hafeez/BNotifyFlutterSDK" target="_blank" rel="noopener">gitlab.com/hamza.hafeez/BNotifyFlutterSDK</a></li>
           <li>Support: <a href="contact.html">Contact</a> · <a href="faq.html">FAQ</a></li>
         </ul>
 
         <footer class="footer">
           <span>© <a href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a> · Mobile Notification Platform</span>
-          <span>Docs version 1.0 · Platforms: Android, iOS (Web, Flutter &amp; RN coming soon)</span>
+          <span>Docs version 1.0 · Platforms: Android, iOS, Flutter (Web &amp; RN coming soon)</span>
         </footer>
       </div>
     </main>
