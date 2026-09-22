@@ -28,5 +28,6 @@ python3 -m http.server 8080
 | `react-native.html` | React Native — coming soon |
 | `faq.html` | FAQ |
 | `contact.html` | Contact |
+| `BNotify-SDK-Documentation.pdf` | Complete offline PDF of these pages |
 
 Hosted via GitHub Pages from the `main` branch (`/`).

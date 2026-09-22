@@ -1035,3 +1035,75 @@ ul.clean li {
     padding: 3px 6px;
   }
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm 16mm;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .topbar,
+  .sidebar,
+  .copy-btn,
+  .menu-toggle,
+  .theme-toggle,
+  .toc-inline,
+  .nav-sub {
+    display: none !important;
+  }
+
+  .layout {
+    display: block !important;
+    min-height: 0 !important;
+  }
+
+  .content,
+  .content-inner {
+    max-width: none !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .pre-wrap,
+  table,
+  .callout,
+  figure,
+  .platform-card,
+  tr {
+    break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    break-after: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p a[href^="http"]::after,
+  li a[href^="http"]::after,
+  .lead a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  .content-inner::after {
+    content: "BNotify SDK Documentation · https://bnotify.github.io/sdk-docs/";
+    display: block;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #5b6b86;
+  }
+}
