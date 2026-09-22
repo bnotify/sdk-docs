@@ -49,6 +49,10 @@
         <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
       </div>
       <div class="sidebar-section">
+        <div class="sidebar-label">Server</div>
+        <a class="nav-link" data-page="backend-api.html" href="backend-api.html">Backend API <span class="badge badge-live">Live</span></a>
+      </div>
+      <div class="sidebar-section">
         <div class="sidebar-label">Support</div>
         <a class="nav-link" href="https://console.bnotify.com/projects" target="_blank" rel="noopener">Console Dashboard</a>
         <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
@@ -64,7 +68,7 @@
         <div class="faq">
           <details open>
             <summary>Does the SDK send push notifications?</summary>
-            <p>No. The SDK registers the device and displays / tracks messages. You create and send campaigns from the BNotify dashboard.</p>
+            <p>No. The SDK registers the device and displays / tracks messages. You create and send campaigns from the BNotify dashboard, or POST to the <a href="backend-api.html">Backend API</a> from your own server.</p>
           </details>
           <details>
             <summary>Which platforms are available today?</summary>
@@ -101,6 +105,10 @@
           <details>
             <summary>Can I use the SDKs offline / without a dashboard project?</summary>
             <p>Device registration and delivery require valid project credentials and a network connection.</p>
+          </details>
+          <details>
+            <summary>How do I send a notification from my own backend?</summary>
+            <p>In Console → <strong>Settings</strong>, copy <strong>Webhooks</strong> (the POST URL) and <strong>API Key</strong> (the <code>apiToken</code> field). POST a JSON body that includes <code>tokens</code> for the devices that should receive it. If <code>isScheduled</code> is <code>false</code>, omit <code>scheduledAt</code>. Full contract: <a href="backend-api.html">Backend API</a>.</p>
           </details>
           <details>
             <summary>What is the Flutter package name?</summary>

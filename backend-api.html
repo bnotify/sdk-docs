@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Backend API — BNotify SDK</title>
+  <meta name="description" content="Send BNotify notifications from your own server with the Console webhook API." />
+  <link rel="icon" href="assets/img/icon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/docs.css" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("bn-theme");
+      document.documentElement.setAttribute("data-theme", t === "dark" ? "dark" : "light");
+    })();
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <img class="brand-icon" src="assets/img/icon.png" alt="BNotify icon" />
+      <img class="brand-logo" src="assets/img/logo.png" alt="bnotify" />
+    </a>
+    <div class="topbar-actions">
+      <a class="topbar-link" href="https://bnotify.com/" target="_blank" rel="noopener">bnotify.com</a>
+      <a class="topbar-link" href="https://console.bnotify.com/projects" target="_blank" rel="noopener">Console</a>
+      <a class="topbar-link" href="faq.html">FAQ</a>
+      <a class="topbar-link" href="contact.html">Contact</a>
+      <a class="btn btn-primary" href="https://console.bnotify.com/projects" target="_blank" rel="noopener">Open Console</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Overview</div>
+        <a class="nav-link" data-page="index.html" href="index.html">Introduction</a>
+        <a class="nav-link" data-page="console.html" href="console.html">Create a project</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Platforms</div>
+        <a class="nav-link" data-page="android.html" href="android.html">Android <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="ios.html" href="ios.html">iOS <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="web.html" href="web.html">Web <span class="badge badge-soon">Soon</span></a>
+        <a class="nav-link" data-page="flutter.html" href="flutter.html">Flutter <span class="badge badge-live">Live</span></a>
+        <a class="nav-link" data-page="react-native.html" href="react-native.html">React Native <span class="badge badge-soon">Soon</span></a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Server</div>
+        <a class="nav-link" data-page="backend-api.html" href="backend-api.html">Backend API <span class="badge badge-live">Live</span></a>
+        <div class="nav-sub">
+          <a href="#credentials">Credentials</a>
+          <a href="#endpoint">Endpoint</a>
+          <a href="#fields">Request fields</a>
+          <a href="#schedule">Scheduling</a>
+          <a href="#tokens">Device tokens</a>
+          <a href="#examples">Examples</a>
+          <a href="#security">Security</a>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Support</div>
+        <a class="nav-link" href="https://console.bnotify.com/projects" target="_blank" rel="noopener">Console Dashboard</a>
+        <a class="nav-link" data-page="faq.html" href="faq.html">FAQ</a>
+        <a class="nav-link" data-page="contact.html" href="contact.html">Contact</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-inner">
+        <div class="page-kicker">Server · Backend API</div>
+        <h1>Send notifications from your backend</h1>
+        <p class="lead">Use this HTTP API when your own server should send a BNotify notification — for example after an order, a payment, or any event in your backend. The mobile SDK only registers the device and displays the message. Your server decides when to send.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Copy the URL and key from Console</div>
+          <p>Open <a href="https://console.bnotify.com/" target="_blank" rel="noopener">BNotify Console</a> → <strong>Settings</strong>. Use <strong>Webhooks</strong> as the request URL and <strong>API Key</strong> as <code>apiToken</code> in the JSON body. Do not hard-code another project’s key.</p>
+        </div>
+
+        <div class="meta-row">
+          <span class="chip"><strong>Method</strong> POST</span>
+          <span class="chip"><strong>Body</strong> JSON</span>
+          <span class="chip"><strong>Auth</strong> <code>apiToken</code> in body</span>
+          <span class="chip"><strong>Target</strong> <code>tokens</code> array</span>
+        </div>
+
+        <div class="toc-inline">
+          <strong>On this page</strong>
+          <ol>
+            <li><a href="#when">When to use this API</a></li>
+            <li><a href="#credentials">Where to get the URL and API key</a></li>
+            <li><a href="#endpoint">Endpoint</a></li>
+            <li><a href="#fields">Request fields</a></li>
+            <li><a href="#schedule">Send now vs schedule</a></li>
+            <li><a href="#tokens">Which devices receive it</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="#checklist">Checklist</a></li>
+            <li><a href="#security">Security</a></li>
+          </ol>
+        </div>
+
+        <h2 id="when">When to use this API</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>You want to…</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr><td>Compose and send from the BNotify dashboard</td><td>Console campaigns (no code)</td></tr>
+              <tr><td>Send from your server when something happens in your product</td><td>This Backend API</td></tr>
+              <tr><td>Register a phone and show the notification</td><td><a href="android.html">Android</a>, <a href="ios.html">iOS</a>, or <a href="flutter.html">Flutter</a> SDK</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Typical flow: the app SDK returns a device token → your app uploads that token to <em>your</em> server → your server POSTs this API with those tokens when it is time to notify.</p>
+
+        <h2 id="credentials">Where to get the URL and API key</h2>
+        <p>In the Console, open the project, then <strong>Settings</strong>.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Console field</th><th>Use it as</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Webhooks</strong></td><td>The POST URL. Example shape: <code>https://bnotify.convexinteractive.com/webhook</code>. Always copy the value shown for your project.</td></tr>
+              <tr><td><strong>API Key</strong></td><td>The <code>apiToken</code> field inside the JSON body. This identifies the project.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">Keep the API key on the server</div>
+          <p>Call this endpoint only from your backend. Do not put the API key in a mobile app, a website frontend, or a public repository.</p>
+        </div>
+
+        <h2 id="endpoint">Endpoint</h2>
+        <div class="pre-wrap">
+          <span class="lang">HTTP</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>POST {Webhooks URL from Console → Settings}
+Content-Type: application/json</code></pre>
+        </div>
+        <p>The current production webhook is usually:</p>
+        <div class="pre-wrap">
+          <span class="lang">URL</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>https://bnotify.convexinteractive.com/webhook</code></pre>
+        </div>
+        <p>If Settings shows a different Webhooks value, use that value.</p>
+
+        <h2 id="fields">Request fields</h2>
+        <p>Send one JSON object. <code>apiToken</code> and <code>tokens</code> are required for a targeted send. Include <code>scheduledAt</code> only when <code>isScheduled</code> is <code>true</code>.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>apiToken</code></td><td>string</td><td>Yes</td><td>Project <strong>API Key</strong> from Console → Settings.</td></tr>
+              <tr><td><code>tokens</code></td><td>string[]</td><td>Yes</td><td>Device tokens that should receive this notification. One string per device.</td></tr>
+              <tr><td><code>title</code></td><td>string</td><td>Yes</td><td>Notification title.</td></tr>
+              <tr><td><code>message</code></td><td>string</td><td>Yes</td><td>Notification body.</td></tr>
+              <tr><td><code>type</code></td><td>string</td><td>No</td><td>Your label for the message, for example <code>promo</code>.</td></tr>
+              <tr><td><code>screen</code></td><td>string</td><td>No</td><td>Screen name the app should open on tap. The SDK exposes this on the click callback.</td></tr>
+              <tr><td><code>action</code></td><td>string</td><td>No</td><td>Action hint for the app, for example <code>navigate</code>.</td></tr>
+              <tr><td><code>imageUrl</code></td><td>string</td><td>No</td><td>HTTPS image URL. iOS expanded images also need a Notification Service Extension.</td></tr>
+              <tr><td><code>deepLink</code></td><td>string</td><td>No</td><td>Link the app can open, for example <code>convexinteractive.com</code>.</td></tr>
+              <tr><td><code>isExpanded</code></td><td>string</td><td>No</td><td><code>"true"</code> or <code>"false"</code>. Controls expanded notification content.</td></tr>
+              <tr><td><code>isScheduled</code></td><td>boolean</td><td>Yes</td><td><code>true</code> to send later. <code>false</code> to send immediately.</td></tr>
+              <tr><td><code>scheduledAt</code></td><td>string</td><td>Only if scheduled</td><td>Format <code>YYYY-MM-DD HH:mm:ss</code>, for example <code>2026-09-22 18:00:00</code>. Omit this field when <code>isScheduled</code> is <code>false</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="schedule">Send now vs schedule</h2>
+        <h3>Send immediately</h3>
+        <p>Set <code>isScheduled</code> to <code>false</code> and <strong>do not</strong> send <code>scheduledAt</code>.</p>
+        <div class="pre-wrap">
+          <span class="lang">JSON</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>{
+  "title": "Order shipped",
+  "message": "Your order is on the way.",
+  "type": "promo",
+  "screen": "home",
+  "action": "navigate",
+  "imageUrl": "https://example.com/image.jpg",
+  "apiToken": "YOUR_API_KEY",
+  "isScheduled": false,
+  "isExpanded": "false",
+  "deepLink": "example.com",
+  "tokens": [
+    "DEVICE_TOKEN_1",
+    "DEVICE_TOKEN_2"
+  ]
+}</code></pre>
+        </div>
+
+        <h3>Send at a specific time</h3>
+        <p>Set <code>isScheduled</code> to <code>true</code> and include <code>scheduledAt</code>.</p>
+        <div class="pre-wrap">
+          <span class="lang">JSON</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>{
+  "title": "Test Notification",
+  "message": "This is a test notification to check system",
+  "type": "promo",
+  "screen": "home",
+  "action": "navigate",
+  "imageUrl": "https://example.com/image.jpg",
+  "apiToken": "YOUR_API_KEY",
+  "isScheduled": true,
+  "isExpanded": "false",
+  "deepLink": "example.com",
+  "scheduledAt": "2026-09-22 18:00:00",
+  "tokens": [
+    "DEVICE_TOKEN_1"
+  ]
+}</code></pre>
+        </div>
+
+        <h2 id="tokens">Which devices receive it</h2>
+        <p><code>tokens</code> is the list of BNotify device tokens. The notification is sent only to those devices.</p>
+        <ul class="clean">
+          <li>Android / iOS / Flutter SDKs expose the token after registration (<code>onToken</code> in Flutter, the native token callback on Android and iOS).</li>
+          <li>Store that token on your server, next to the user account.</li>
+          <li>When you notify one user, send that user’s token. When you notify many users, send every token in the same <code>tokens</code> array.</li>
+        </ul>
+        <p>An empty <code>tokens</code> array does not identify a device. Always pass the tokens you collected from the SDK.</p>
+
+        <h2 id="examples">Examples</h2>
+        <p>Replace <code>YOUR_API_KEY</code> with Settings → API Key, and replace device tokens with tokens from your database. The samples below send immediately (<code>isScheduled: false</code>, no <code>scheduledAt</code>).</p>
+
+        <h3>cURL</h3>
+        <div class="pre-wrap">
+          <span class="lang">bash</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>curl --location 'https://bnotify.convexinteractive.com/webhook' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "title": "Test Notification",
+    "message": "This is a test notification to check system",
+    "type": "promo",
+    "screen": "home",
+    "action": "navigate",
+    "imageUrl": "https://example.com/image.jpg",
+    "apiToken": "YOUR_API_KEY",
+    "isScheduled": false,
+    "isExpanded": "false",
+    "deepLink": "example.com",
+    "tokens": [
+      "DEVICE_TOKEN_1"
+    ]
+  }'</code></pre>
+        </div>
+
+        <h3>Node.js</h3>
+        <div class="pre-wrap">
+          <span class="lang">JavaScript</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>const response = await fetch("https://bnotify.convexinteractive.com/webhook", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    title: "Test Notification",
+    message: "This is a test notification to check system",
+    type: "promo",
+    screen: "home",
+    action: "navigate",
+    imageUrl: "https://example.com/image.jpg",
+    apiToken: process.env.BNOTIFY_API_KEY,
+    isScheduled: false,
+    isExpanded: "false",
+    deepLink: "example.com",
+    tokens: ["DEVICE_TOKEN_1"],
+  }),
+});
+
+if (!response.ok) {
+  throw new Error(`BNotify webhook failed: ${response.status}`);
+}</code></pre>
+        </div>
+
+        <h3>Python</h3>
+        <div class="pre-wrap">
+          <span class="lang">Python</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>import os
+import requests
+
+payload = {
+    "title": "Test Notification",
+    "message": "This is a test notification to check system",
+    "type": "promo",
+    "screen": "home",
+    "action": "navigate",
+    "imageUrl": "https://example.com/image.jpg",
+    "apiToken": os.environ["BNOTIFY_API_KEY"],
+    "isScheduled": False,
+    "isExpanded": "false",
+    "deepLink": "example.com",
+    "tokens": ["DEVICE_TOKEN_1"],
+}
+
+response = requests.post(
+    "https://bnotify.convexinteractive.com/webhook",
+    json=payload,
+    timeout=30,
+)
+response.raise_for_status()</code></pre>
+        </div>
+
+        <h3>PHP</h3>
+        <div class="pre-wrap">
+          <span class="lang">PHP</span>
+          <button class="copy-btn" type="button">Copy</button>
+          <pre><code>$payload = [
+    "title" =&gt; "Test Notification",
+    "message" =&gt; "This is a test notification to check system",
+    "type" =&gt; "promo",
+    "screen" =&gt; "home",
+    "action" =&gt; "navigate",
+    "imageUrl" =&gt; "https://example.com/image.jpg",
+    "apiToken" =&gt; getenv("BNOTIFY_API_KEY"),
+    "isScheduled" =&gt; false,
+    "isExpanded" =&gt; "false",
+    "deepLink" =&gt; "example.com",
+    "tokens" =&gt; ["DEVICE_TOKEN_1"],
+];
+
+$ch = curl_init("https://bnotify.convexinteractive.com/webhook");
+curl_setopt_array($ch, [
+    CURLOPT_POST =&gt; true,
+    CURLOPT_HTTPHEADER =&gt; ["Content-Type: application/json"],
+    CURLOPT_POSTFIELDS =&gt; json_encode($payload),
+    CURLOPT_RETURNTRANSFER =&gt; true,
+]);
+$body = curl_exec($ch);
+$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+if ($status &lt; 200 || $status &gt;= 300) {
+    throw new RuntimeException("BNotify webhook failed: " . $status);
+}</code></pre>
+        </div>
+
+        <h2 id="checklist">Integration checklist</h2>
+        <ul class="checklist">
+          <li><span class="mark">1</span><span>Create the project and register the mobile app in the <a href="console.html">Console</a></span></li>
+          <li><span class="mark">2</span><span>Integrate the <a href="android.html">Android</a>, <a href="ios.html">iOS</a>, or <a href="flutter.html">Flutter</a> SDK so devices produce a token</span></li>
+          <li><span class="mark">3</span><span>Save each device token on your server</span></li>
+          <li><span class="mark">4</span><span>Copy <strong>Webhooks</strong> and <strong>API Key</strong> from Console → Settings</span></li>
+          <li><span class="mark">5</span><span>POST JSON from your backend with <code>apiToken</code> and <code>tokens</code></span></li>
+          <li><span class="mark">6</span><span>For an immediate send, set <code>isScheduled</code> to <code>false</code> and omit <code>scheduledAt</code></span></li>
+          <li><span class="mark">7</span><span>For a later send, set <code>isScheduled</code> to <code>true</code> and set <code>scheduledAt</code> to <code>YYYY-MM-DD HH:mm:ss</code></span></li>
+          <li><span class="mark">8</span><span>Confirm the notification on a physical device that owns one of the tokens</span></li>
+        </ul>
+
+        <h2 id="security">Security</h2>
+        <ul class="clean">
+          <li>Store the API key in a server secret (environment variable or secret manager), not in source control.</li>
+          <li>Call the webhook only from your backend.</li>
+          <li>Send tokens only for the users who should see that message.</li>
+          <li>If an API key is exposed, generate a new one in the Console and update your server.</li>
+        </ul>
+
+        <div class="callout tip">
+          <div class="callout-title">Tap routing</div>
+          <p>Set <code>screen</code> to the same route name your app reads from the SDK click callback (<code>onClick</code> / notification extras). The API delivers the payload; the app decides which screen to open.</p>
+        </div>
+
+        <footer class="footer">
+          <span><a href="flutter.html">← Flutter</a> · <a href="faq.html">FAQ →</a></span>
+          <span>Backend API · Webhook</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/docs.js"></script>
+</body>
+</html>

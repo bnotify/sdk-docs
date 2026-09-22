@@ -24,6 +24,7 @@ python3 -m http.server 8080
 | `ios.html` | iOS (SPM) |
 | `web.html` | Web — coming soon |
 | `flutter.html` | Flutter (`bnotify_flutter` on pub.dev) |
+| `backend-api.html` | Backend API — send from your server |
 | `react-native.html` | React Native — coming soon |
 | `faq.html` | FAQ |
 | `contact.html` | Contact |
